@@ -1,0 +1,13 @@
+<resources>
+
+    <style name="AppTheme" parent="AppTheme.Base"></style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/_5AC8FA</item>
+        <item name="colorPrimaryDark">@color/_5AC8FA</item>
+        <item name="colorAccent">@color/_5AC8FA</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+
+</resources>

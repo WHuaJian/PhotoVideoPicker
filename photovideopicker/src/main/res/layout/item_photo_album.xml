@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/albumitem_height"
+                android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:id="@+id/layout_left_la"
+        android:layout_width="@dimen/albumitem_content_height"
+        android:layout_height="@dimen/albumitem_content_height"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/bg_album_border"
+            android:scaleType="fitCenter"/>
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_album"
+            android:layout_width="@dimen/albumitem_content_height"
+            android:layout_height="@dimen/albumitem_content_height"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="centerCrop"
+            fresco:placeholderImage="@mipmap/photo_default_bg"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/layout_left_la"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name_la"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/tv_count_la"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_index"
+            android:layout_width="@dimen/albumitem_image_height"
+            android:layout_height="@dimen/albumitem_image_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_choice_green"/>
+    </RelativeLayout>
+
+</RelativeLayout>

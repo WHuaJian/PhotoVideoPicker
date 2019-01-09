@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/iv_root">
+
+    <RelativeLayout
+        android:id="@+id/rl_photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            fresco:placeholderImage="@mipmap/photo_default_bg" />
+
+        <TextView
+            android:id="@+id/tvVideoTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/_ffffff"
+            android:textSize="10sp"
+            android:gravity="center_horizontal"
+            android:background="#22000000"
+            android:padding="3dp"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:text="时长：2分20秒"/>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/cb_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/iv_photo"
+        android:background="@drawable/photo_checkbox_selector" />
+
+</RelativeLayout>

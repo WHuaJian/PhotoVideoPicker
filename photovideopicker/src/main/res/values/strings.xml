@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PhotoPickerModule</string>
+
+    <string name="recent_photos">最近照片</string>
+    <string name="preview">预览</string>
+    <string name="image_count">%1$d张</string>
+    <string name="done_with_count">投屏(%1$d/%2$d)</string>
+    <string name="done_with_count_finish">完成(%1$d/%2$d)</string>
+    <string name="share_to_class">分享到班级(%1$d/%2$d)</string>
+    <string name="pic_count">%1$s/%2$s</string>
+
+    <string name="recent_video">最近视频</string>
+    <string name="over_max_count_video_tips">你最多可以选择%1$d视频</string>
+    <string name="over_max_size_video_tips">选择的视频过大</string>
+    <string name="over_max_count_tips">你最多可以选择%1$d张图片</string>
+</resources>
