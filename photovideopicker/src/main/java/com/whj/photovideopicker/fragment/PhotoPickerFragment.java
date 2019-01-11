@@ -49,6 +49,7 @@ import java.util.UUID;
 import me.kareluo.imaging.IMGEditActivity;
 
 import static android.app.Activity.RESULT_OK;
+import static com.whj.photovideopicker.PhotoPicker.IS_COMPRESS;
 import static com.whj.photovideopicker.PhotoPicker.IS_NEED_PIC_EDIT;
 import static com.whj.photovideopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
 import static com.whj.photovideopicker.PhotoPicker.PHOTO;
@@ -87,15 +88,17 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     TextView mAlbum, tv_share;
     TextView mPreview;
 
-    private boolean isNeedPicEdit = false;
+    private boolean isNeedPicEdit;
+    private boolean isCompress;
 
 
-    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit,boolean isSupportShare) {
+    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit,boolean isCompress,boolean isSupportShare) {
         PhotoPickerFragment pickerFragment = new PhotoPickerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(PHOTO_EXTRA_MAX_COUNT, max_count);
         bundle.putBoolean(SUPPORT_SHARE, isSupportShare);
         bundle.putBoolean(IS_NEED_PIC_EDIT,isNeedPicEdit);
+        bundle.putBoolean(IS_COMPRESS,isCompress);
         pickerFragment.setArguments(bundle);
         return pickerFragment;
     }
@@ -125,6 +128,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         maxCount = getArguments().getInt(PHOTO_EXTRA_MAX_COUNT);
         isSupportShare = getArguments().getBoolean(SUPPORT_SHARE, false);
         isNeedPicEdit = getArguments().getBoolean(IS_NEED_PIC_EDIT,false);
+        isCompress = getArguments().getBoolean(IS_COMPRESS,false);
         directories = new ArrayList<>();
         photoGridAdapter = new PhotoGridAdapter(getActivity(), directories);
         listAdapter = new PopupDirectoryListAdapter(getActivity(), directories);
@@ -376,7 +380,15 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         } else {
             mPreview.setClickable(false);
             mPreview.setEnabled(false);
-            compressImages(getSelectedPhotoPaths());
+            if(isCompress){
+                compressImages(getSelectedPhotoPaths());
+            }else{
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, getSelectedPhotoPaths());
+                intent.putExtra(RESULT_TYPE, PHOTO);
+                getActivity().setResult(RESULT_OK, intent);
+                getActivity().finish();
+            }
         }
     }
 

@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.whj.photovideopicker.PhotoPicker.ALL;
 import static com.whj.photovideopicker.PhotoPicker.DEFAULT_MAX_COUNT;
+import static com.whj.photovideopicker.PhotoPicker.IS_COMPRESS;
 import static com.whj.photovideopicker.PhotoPicker.IS_NEED_PIC_EDIT;
 import static com.whj.photovideopicker.PhotoPicker.IS_TOUPING;
 import static com.whj.photovideopicker.PhotoPicker.MODE_TYPE_SELECT;
@@ -52,6 +53,7 @@ public class PickerMainActivity extends PickerBaseActivity {
     private boolean isSupportShare;
     private boolean isTouping;
     private boolean isNeedPicEdit;
+    private boolean isCompress;
     private @PhotoPicker.ModeType
     String modeType;
 
@@ -88,6 +90,7 @@ public class PickerMainActivity extends PickerBaseActivity {
         videoDirectory = getIntent().getExtras().getString(VIDEO_SAVE_DIRECTORY, DEFAULT_VIDEO_SAVE_DIRECTORY);
         isSupportShare = getIntent().getExtras().getBoolean(SUPPORT_SHARE, false);
         isTouping = getIntent().getExtras().getBoolean(IS_TOUPING, false);
+        isCompress = getIntent().getExtras().getBoolean(IS_COMPRESS, false);
         isNeedPicEdit = getIntent().getExtras().getBoolean(IS_NEED_PIC_EDIT,false);
         modeType = getIntent().getExtras().getString(MODE_TYPE_SELECT, ALL);
 
@@ -105,7 +108,7 @@ public class PickerMainActivity extends PickerBaseActivity {
      * 三种模式
      */
     private void switchMode() {
-        photoPickerFragment = PhotoPickerFragment.newInstance(maxPhotoCount, isNeedPicEdit,isSupportShare);
+        photoPickerFragment = PhotoPickerFragment.newInstance(maxPhotoCount, isNeedPicEdit,isCompress,isSupportShare);
         videoPickerFragment = VideoPickerFragment.newInstance(maxVideoCount, videoDirectory, isSupportShare);
         switch (modeType) {
             case PHOTO:

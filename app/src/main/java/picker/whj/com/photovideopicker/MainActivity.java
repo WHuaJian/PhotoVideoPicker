@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 .setSupportShare(true) //是否支持分享，默认不支持
                 .setIsTouPing(false) //是否是投屏，默认是完成
                 .setIsNeedPicEdit(false) //是否支持裁剪
+                .setPhotoCompress(false) //是否压缩图片
                 .videoSaveDirectory(Environment.getExternalStorageDirectory().getPath()) //指定视频存储文件夹
                 .build(new OnResultListener() {
 

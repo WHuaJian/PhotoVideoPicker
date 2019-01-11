@@ -6,6 +6,7 @@ import android.support.annotation.StringDef;
 
 import com.whj.photovideopicker.listener.OnResultListener;
 import com.whj.photovideopicker.utils.OnResultRequest;
+import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,6 +31,7 @@ public class PhotoPicker {
     public static final String RESULT_TYPE = "RESULT_TYPE";
     public static final String SUPPORT_SHARE = "SUPPORT_SHARE"; //是否支持分享，默认不支持
     public static final String IS_TOUPING = "IS_TOUPING"; //是否是投屏
+    public static final String IS_COMPRESS = "IS_COMPRESS"; //是否压缩图片
     public final static String IS_NEED_PIC_EDIT = "IS_NEED_PIC_EDIT"; //是否支持裁剪
 
 
@@ -54,6 +56,7 @@ public class PhotoPicker {
     private boolean isSupportShare;
     private boolean is_touping;
     private boolean isNeedPicEdit;
+    private boolean isCompress;
 
 
     /**
@@ -72,6 +75,9 @@ public class PhotoPicker {
         return new Builder(activity);
     }
 
+    /**
+     *
+     */
     public static class Builder {
 
         private PhotoPicker picker = new PhotoPicker();
@@ -128,6 +134,17 @@ public class PhotoPicker {
             return this;
         }
 
+
+        /**
+         * 是否对图片进行压缩
+         * @param isCompress
+         * @return
+         */
+        public Builder setPhotoCompress(boolean isCompress){
+            picker.isCompress = isCompress;
+            return this;
+        }
+
         /**
          * 是否需要进截取界面
          * @param isNeedPicEdit
@@ -147,6 +164,7 @@ public class PhotoPicker {
             intent.putExtra(SUPPORT_SHARE, picker.isSupportShare);
             intent.putExtra(IS_NEED_PIC_EDIT,picker.isNeedPicEdit);
             intent.putExtra(IS_TOUPING, picker.is_touping);
+            intent.putExtra(IS_COMPRESS, picker.isCompress);
             OnResultRequest resultRequest = new OnResultRequest(picker.activity.get());
             resultRequest.startForResult(intent, new OnResultRequest.Callback() {
                 @Override
