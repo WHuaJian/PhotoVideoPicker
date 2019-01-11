@@ -8,6 +8,7 @@
     <string name="done_with_count_finish">完成(%1$d/%2$d)</string>
     <string name="share_to_class">分享到班级(%1$d/%2$d)</string>
     <string name="pic_count">%1$s/%2$s</string>
+    <string name="capture">裁剪</string>
 
     <string name="recent_video">最近视频</string>
     <string name="over_max_count_video_tips">你最多可以选择%1$d视频</string>

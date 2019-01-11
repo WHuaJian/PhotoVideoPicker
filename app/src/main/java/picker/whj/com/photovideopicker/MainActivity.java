@@ -4,6 +4,7 @@ import android.Manifest;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.whj.photovideopicker.PhotoPicker;
 import com.whj.photovideopicker.listener.OnResultListener;
 import com.whj.photovideopicker.utils.ImagePipelineConfigFactory;
+import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
 
@@ -59,23 +61,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void selectPhoto(){
-        new PhotoPicker.Builder(this)
+        PhotoPicker.configIpAddress("111","222");
+        PhotoPicker.builder(this)
                 .modeType(PhotoPicker.ALL) //三种模式
-                .configIpAddress("","")
                 .choiceVideoNumber(1) //视频选择最大数量，默认9
                 .choicePhotoNumber(9) //图片选择最大数量，默认9
-                .setSupportShare(false) //是否支持分享，默认不支持
-                .setIsTouPing(true) //是否是投屏，默认是完成
+                .setSupportShare(true) //是否支持分享，默认不支持
+                .setIsTouPing(false) //是否是投屏，默认是完成
+                .setIsNeedPicEdit(false) //是否支持裁剪
                 .videoSaveDirectory(Environment.getExternalStorageDirectory().getPath()) //指定视频存储文件夹
                 .build(new OnResultListener() {
 
                     @Override
                     public void onPhotoResult(ArrayList<String> photos) {
-                        Toast.makeText(MainActivity.this,photos.size(),Toast.LENGTH_LONG).show();
+
                     }
 
                     @Override
                     public void onVideoResult(ArrayList<String> videos) {
+
                     }
 
                     @Override

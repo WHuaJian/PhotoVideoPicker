@@ -30,6 +30,7 @@ public class PhotoPicker {
     public static final String RESULT_TYPE = "RESULT_TYPE";
     public static final String SUPPORT_SHARE = "SUPPORT_SHARE"; //是否支持分享，默认不支持
     public static final String IS_TOUPING = "IS_TOUPING"; //是否是投屏
+    public final static String IS_NEED_PIC_EDIT = "IS_NEED_PIC_EDIT"; //是否支持裁剪
 
 
     public static final String PHOTO = "photo";
@@ -52,26 +53,31 @@ public class PhotoPicker {
     private String videoDirectory;
     private boolean isSupportShare;
     private boolean is_touping;
+    private boolean isNeedPicEdit;
+
+
+    /**
+     * 当需要用到摄像头直播时使用该方法初始ip地址和udp端口号
+     * */
+    public static void configIpAddress(String ip,String port){
+        IP_ADDRESS = ip;
+        UDP_PORT = port;
+    }
 
     protected PhotoPicker() {
 
+    }
+
+    public static Builder builder(Activity activity){
+        return new Builder(activity);
     }
 
     public static class Builder {
 
         private PhotoPicker picker = new PhotoPicker();
 
-        public Builder(Activity activity) {
+        private Builder(Activity activity) {
             picker.activity = new WeakReference<>(activity);
-        }
-
-       /**
-        * 当需要用到摄像头直播时使用该方法初始ip地址和udp端口号
-        * */
-        public Builder configIpAddress(String ip,String port){
-            IP_ADDRESS = ip;
-            UDP_PORT = port;
-            return this;
         }
 
         /**
@@ -122,6 +128,16 @@ public class PhotoPicker {
             return this;
         }
 
+        /**
+         * 是否需要进截取界面
+         * @param isNeedPicEdit
+         * @return
+         */
+        public Builder setIsNeedPicEdit(boolean isNeedPicEdit){
+            picker.isNeedPicEdit = isNeedPicEdit;
+            return this;
+        }
+
         public PhotoPicker build(final OnResultListener listener) {
             Intent intent = new Intent(picker.activity.get(), PickerMainActivity.class);
             intent.putExtra(MODE_TYPE_SELECT, picker.modeType);
@@ -129,6 +145,7 @@ public class PhotoPicker {
             intent.putExtra(VIDEO_EXTRA_MAX_COUNT, picker.choiceVideoNumber);
             intent.putExtra(VIDEO_SAVE_DIRECTORY, picker.videoDirectory);
             intent.putExtra(SUPPORT_SHARE, picker.isSupportShare);
+            intent.putExtra(IS_NEED_PIC_EDIT,picker.isNeedPicEdit);
             intent.putExtra(IS_TOUPING, picker.is_touping);
             OnResultRequest resultRequest = new OnResultRequest(picker.activity.get());
             resultRequest.startForResult(intent, new OnResultRequest.Callback() {

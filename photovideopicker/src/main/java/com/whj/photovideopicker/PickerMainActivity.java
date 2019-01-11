@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.whj.photovideopicker.PhotoPicker.ALL;
 import static com.whj.photovideopicker.PhotoPicker.DEFAULT_MAX_COUNT;
+import static com.whj.photovideopicker.PhotoPicker.IS_NEED_PIC_EDIT;
 import static com.whj.photovideopicker.PhotoPicker.IS_TOUPING;
 import static com.whj.photovideopicker.PhotoPicker.MODE_TYPE_SELECT;
 import static com.whj.photovideopicker.PhotoPicker.PHOTO;
@@ -39,7 +40,7 @@ import static com.whj.photovideopicker.PhotoPicker.VIDEO_SAVE_DIRECTORY;
  */
 
 public class PickerMainActivity extends PickerBaseActivity {
-    private TextView finishTv;
+    private TextView finishTv,topbar_right_capture;
     private ImageView mBack;
     private List<PickerBaseFragment> mFragments = new ArrayList<>();
     private List<MenuModel> menuModels = new ArrayList<>();
@@ -50,6 +51,7 @@ public class PickerMainActivity extends PickerBaseActivity {
     private String DEFAULT_VIDEO_SAVE_DIRECTORY;
     private boolean isSupportShare;
     private boolean isTouping;
+    private boolean isNeedPicEdit;
     private @PhotoPicker.ModeType
     String modeType;
 
@@ -73,6 +75,7 @@ public class PickerMainActivity extends PickerBaseActivity {
         mBack = $(R.id.topbar_left_icon);
         viewPager = $(R.id.viewPager);
         photo_tablayout = $(R.id.photo_tablayout);
+        topbar_right_capture = $(R.id.topbar_right_capture);
     }
 
 
@@ -85,7 +88,14 @@ public class PickerMainActivity extends PickerBaseActivity {
         videoDirectory = getIntent().getExtras().getString(VIDEO_SAVE_DIRECTORY, DEFAULT_VIDEO_SAVE_DIRECTORY);
         isSupportShare = getIntent().getExtras().getBoolean(SUPPORT_SHARE, false);
         isTouping = getIntent().getExtras().getBoolean(IS_TOUPING, false);
+        isNeedPicEdit = getIntent().getExtras().getBoolean(IS_NEED_PIC_EDIT,false);
         modeType = getIntent().getExtras().getString(MODE_TYPE_SELECT, ALL);
+
+        if(isNeedPicEdit){
+            topbar_right_capture.setVisibility(View.VISIBLE);
+        }else{
+            topbar_right_capture.setVisibility(View.GONE);
+        }
 
         switchMode();
 
@@ -95,7 +105,7 @@ public class PickerMainActivity extends PickerBaseActivity {
      * 三种模式
      */
     private void switchMode() {
-        photoPickerFragment = PhotoPickerFragment.newInstance(maxPhotoCount, isSupportShare);
+        photoPickerFragment = PhotoPickerFragment.newInstance(maxPhotoCount, isNeedPicEdit,isSupportShare);
         videoPickerFragment = VideoPickerFragment.newInstance(maxVideoCount, videoDirectory, isSupportShare);
         switch (modeType) {
             case PHOTO:
@@ -155,10 +165,34 @@ public class PickerMainActivity extends PickerBaseActivity {
             }
         });
 
+        topbar_right_capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentIndex == 0){
+                    photoPickerFragment.capturePicture();
+                }
+            }
+        });
+
     }
 
     public void initRightText(int selectCount, int maxCount) {
         finishTv.setText((getString(getTextString(), selectCount, maxCount)));
+
+        if(currentIndex == 0){
+            if(selectCount == 1){
+                if(isNeedPicEdit){
+                    topbar_right_capture.setVisibility(View.VISIBLE);
+                }
+                topbar_right_capture.setClickable(true);
+            }else{
+                topbar_right_capture.setVisibility(View.GONE);
+                topbar_right_capture.setClickable(false);
+            }
+        }else{
+            topbar_right_capture.setVisibility(View.GONE);
+            topbar_right_capture.setClickable(false);
+        }
     }
 
     public TextView getRightText() {

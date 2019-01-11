@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -22,8 +24,10 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
+import java.util.UUID;
 
 /**
  * @author William
@@ -243,6 +247,29 @@ public class PickerUtils {
         else
             retStr = "" + i;
         return retStr;
+    }
+
+
+    public static File createFilePath(){
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if (!storageDir.exists()) {
+            if (!storageDir.mkdir()) {
+                Log.e("TAG", "Throwing Errors....");
+            }
+        }
+        File saveFile = null;
+        try {
+            saveFile = File.createTempFile(
+                    UUID.randomUUID().toString(),  /* prefix */
+                    ".jpg",         /* suffix */
+                    storageDir      /* directory */
+            );
+
+            return saveFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

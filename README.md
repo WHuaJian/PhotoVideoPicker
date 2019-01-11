@@ -4,39 +4,43 @@
 
 ## 用法
 ```Java
-    new PhotoPicker.Builder(this)
-        .modeType(PhotoPicker.ALL) //三种模式
-        .configIpAddress("","")
-        .choiceVideoNumber(1) //视频选择最大数量，默认9
-        .choicePhotoNumber(9) //图片选择最大数量，默认9
-        .setSupportShare(false) //是否支持分享，默认不支持
-        .setIsTouPing(true) //是否是投屏，默认是完成
-        .videoSaveDirectory(Environment.getExternalStorageDirectory().getPath()) //指定视频存储文件夹
-        .build(new OnResultListener() {
+      PhotoPicker.configIpAddress("111","222");
+            PhotoPicker.builder(this)
+                    .modeType(PhotoPicker.ALL) //三种模式
+                    .choiceVideoNumber(1) //视频选择最大数量，默认9
+                    .choicePhotoNumber(9) //图片选择最大数量，默认9
+                    .setSupportShare(true) //是否支持分享，默认不支持
+                    .setIsTouPing(false) //是否是投屏，默认是完成
+                    .setIsNeedPicEdit(false) //是否支持裁剪
+                    .videoSaveDirectory(Environment.getExternalStorageDirectory().getPath()) //指定视频存储文件夹
+                    .build(new OnResultListener() {
 
-              @Override
-              public void onPhotoResult(ArrayList<String> photos) {
-                     Toast.makeText(MainActivity.this,photos.size(),Toast.LENGTH_LONG).show();
-              }
+                        @Override
+                        public void onPhotoResult(ArrayList<String> photos) {
 
-              @Override
-              public void onVideoResult(ArrayList<String> videos) {
-              }
+                        }
 
-              @Override
-              public void onPhotoShareResult(ArrayList<String> files) {
-              }
+                        @Override
+                        public void onVideoResult(ArrayList<String> videos) {
 
-              @Override
-              public void onVideoShareResult(ArrayList<String> files) {
-              }
+                        }
 
-              });
+                        @Override
+                        public void onPhotoShareResult(ArrayList<String> files) {
+                        }
+
+                        @Override
+                        public void onVideoShareResult(ArrayList<String> files) {
+
+                        }
+
+                    });
+        }
 ```
 
 ## 引入方式
 ```
-   implementation 'com.whj.picker:PhotoVideoPicker:1.0.0'
+   implementation 'com.whj.picker:PhotoVideoPicker:2.0.0'
 
 ```
 如果无法引用，在app目录build.gradle添加

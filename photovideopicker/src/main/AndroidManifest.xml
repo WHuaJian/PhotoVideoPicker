@@ -28,6 +28,21 @@
                 android:resource="@xml/file_paths" />
 
         </provider>
+
+
+        <activity
+            android:name="me.kareluo.imaging.IMGGalleryActivity"
+            android:theme="@style/ImageGalleryTheme" />
+
+        <activity
+            android:name="me.kareluo.imaging.IMGEditActivity"
+            android:theme="@style/ImageEditTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity android:name="com.otaliastudios.cameraview.CameraActivity"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenLayout|keyboardHidden"/>
+
     </application>
 
 </manifest>
