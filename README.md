@@ -40,7 +40,7 @@
 
 ## 引入方式
 ```
-   implementation 'com.whj.picker:PhotoVideoPicker:2.0.01'
+   implementation 'com.whj.picker:PhotoVideoPicker:2.0.1'
 
 ```
 如果无法引用，在app目录build.gradle添加
@@ -54,7 +54,7 @@
 
 ## License
 ```
- Copyright 2018, WHuaJian
+ Copyright 2019, WHuaJian
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
