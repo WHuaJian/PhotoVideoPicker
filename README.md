@@ -50,6 +50,29 @@
    }
 
 ```
+如果编译时和其他依赖库的support有冲突，在app目录build.gradle添加
+```
+  //解决依赖库版本不一致
+  configurations.all {
+          resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+              def requested = details.requested
+              if (requested.group == 'com.android.support') {
+                  if (!requested.name.startsWith("multidex")) {
+                      //这里指定需要统一的依赖版本,这里统一为26.1.0
+                      details.useVersion '26.1.0'
+                  }
+              }
+          }
+      }
+
+```
+摄像头直播单独配置ip和端口号
+```
+   //配置摄像头直播的ip和端口号
+   PhotoPicker.configIpAddress(ZxingModelUtils.getInstance().getIp(),ZxingModelUtils.getInstance().getUDPPort());
+
+
+```
 
 
 ## License
