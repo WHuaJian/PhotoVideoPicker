@@ -1,10 +1,14 @@
 package com.whj.photovideopicker.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -84,6 +88,7 @@ public class PickerUtils {
         loadImage(simpleDraweeView, url, simpleDraweeView.getLayoutParams().width, simpleDraweeView.getLayoutParams().height);
 
     }
+
     public static void showThumb(SimpleDraweeView simpleDraweeView, String url) {
         showThumb(simpleDraweeView, url, simpleDraweeView.getLayoutParams().width, simpleDraweeView.getLayoutParams().height);
     }
@@ -127,10 +132,10 @@ public class PickerUtils {
     }
 
     /*是否是定制pad*/
-    public static boolean isCustomDevice(){
-        try{
+    public static boolean isCustomDevice() {
+        try {
             return (Build.MANUFACTURER.equalsIgnoreCase("mid") || Build.MANUFACTURER.equalsIgnoreCase("hra")) ? true : false;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -250,7 +255,7 @@ public class PickerUtils {
     }
 
 
-    public static File createFilePath(){
+    public static File createFilePath() {
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!storageDir.exists()) {
             if (!storageDir.mkdir()) {
@@ -273,4 +278,52 @@ public class PickerUtils {
     }
 
 
+    /**
+     * 根据uri获取真实路径
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getRealFilePath(final Context context, final Uri uri) {
+        if (null == uri) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null)
+            data = uri.getPath();
+        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
+
+    /**
+     * 根据uri获取视频时长
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static long getVideoDuration(Context context, Uri uri) {
+        long duration = 0;
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(context, uri);
+            mediaPlayer.prepare();
+            duration = mediaPlayer.getDuration();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return duration;
+    }
 }

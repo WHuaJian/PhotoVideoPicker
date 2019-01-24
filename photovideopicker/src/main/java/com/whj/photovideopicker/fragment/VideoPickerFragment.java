@@ -320,23 +320,35 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_LENOVO && resultCode == RESULT_OK) {
             if (isNeedEncoder) {
-                final String videoPath = data.getStringExtra("video_return_path_key");
-                Log.d("onActivityResult", "videoPath = " + videoPath);
-                refreshGrally(videoPath);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendBroadFalse(videoPath);
-                    }
-                }, 1000);
+                try{
+                    final String videoPath = data.getStringExtra("video_return_path_key");
+                    refreshGrally(videoPath);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendBroadFalse(videoPath, 0l);
+                        }
+                    }, 1000);
+                }catch (Exception e){
+                    toast(e.getMessage());
+                }
             } else {
-                refreshGrally(videoUrl);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendBroadFalse(videoUrl);
-                    }
-                }, 1000);
+                try{
+                    Uri mUri = data.getData();
+                    final String videoPath = PickerUtils.getRealFilePath(getActivity(),mUri);
+                    final long duration = PickerUtils.getVideoDuration(getActivity(),mUri);
+                    refreshGrally(videoPath);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendBroadFalse(videoPath,duration);
+                        }
+                    }, 1000);
+                }catch (Exception e){
+                    toast(e.getMessage());
+                }
+
+
             }
 
         }
@@ -354,17 +366,17 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
     /**
      * 解决某些机型广播媒体库无法及时更新问题
      */
-    private void sendBroadFalse(String videoUrl) {
+    private void sendBroadFalse(String videoUrl, long duration) {
 
         if (!mTempVideos.isEmpty()) {
             if (!mTempVideos.contains(videoUrl)) {
-                Video video = new Video(makeVideoTempId(8), videoUrl, 1000l, 10l, PickerUtils.getFileNameByPath(videoUrl));
+                Video video = new Video(makeVideoTempId(8), videoUrl, duration, 10l, PickerUtils.getFileNameByPath(videoUrl));
                 directories.get(0).getVideos().add(0, video);
                 mVideoAdapter.notifyDataSetChanged();
                 listAdapter.notifyDataSetChanged();
             }
         } else {
-            Video video = new Video(makeVideoTempId(8), videoUrl, 1000l, 10l, PickerUtils.getFileNameByPath(videoUrl));
+            Video video = new Video(makeVideoTempId(8), videoUrl, duration, 10l, PickerUtils.getFileNameByPath(videoUrl));
             directories.get(0).getVideos().add(0, video);
             mVideoAdapter.notifyDataSetChanged();
             listAdapter.notifyDataSetChanged();

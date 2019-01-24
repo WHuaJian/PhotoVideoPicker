@@ -63,14 +63,14 @@ public class MainActivity extends AppCompatActivity {
     public void selectPhoto(){
         PhotoPicker.configIpAddress("111","222");
         PhotoPicker.builder(this)
-                .modeType(PhotoPicker.ALL) //三种模式
+                .modeType(PhotoPicker.VIDEO) //三种模式
                 .choiceVideoNumber(1) //视频选择最大数量，默认9
                 .choicePhotoNumber(9) //图片选择最大数量，默认9
                 .setSupportShare(true) //是否支持分享，默认不支持
                 .setIsTouPing(false) //是否是投屏，默认是完成
                 .setIsNeedPicEdit(true) //是否支持裁剪
                 .setPhotoCompress(false) //是否压缩图片
-                .videoSaveDirectory(Environment.getExternalStorageDirectory().getPath()) //指定视频存储文件夹
+                .videoSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath()) //指定视频存储文件夹
                 .build(new OnResultListener() {
 
                     @Override
