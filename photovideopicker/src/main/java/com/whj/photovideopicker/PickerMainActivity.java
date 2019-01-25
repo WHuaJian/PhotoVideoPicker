@@ -184,7 +184,7 @@ public class PickerMainActivity extends PickerBaseActivity {
 
         if(currentIndex == 0){
             if(selectCount == 1){
-                if(isNeedPicEdit){
+                if(isNeedPicEdit && !modeType.equals(VIDEO)){
                     topbar_right_capture.setVisibility(View.VISIBLE);
                 }
                 topbar_right_capture.setClickable(true);
