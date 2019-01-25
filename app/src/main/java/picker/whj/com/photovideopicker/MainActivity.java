@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public void selectPhoto(){
         PhotoPicker.configIpAddress("111","222");
         PhotoPicker.builder(this)
-                .modeType(PhotoPicker.VIDEO) //三种模式
+                .modeType(PhotoPicker.ALL) //三种模式
                 .choiceVideoNumber(1) //视频选择最大数量，默认9
                 .choicePhotoNumber(9) //图片选择最大数量，默认9
                 .setSupportShare(true) //是否支持分享，默认不支持

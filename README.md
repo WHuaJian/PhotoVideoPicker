@@ -40,7 +40,7 @@
 
 ## 引入方式
 ```
-   implementation 'com.whj.picker:PhotoVideoPicker:2.0.2'
+   implementation 'com.whj.picker:PhotoVideoPicker:2.0.4'
 
 ```
 如果无法引用，在app目录build.gradle添加
