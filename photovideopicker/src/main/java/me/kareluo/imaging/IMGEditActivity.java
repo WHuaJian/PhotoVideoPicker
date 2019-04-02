@@ -1,11 +1,14 @@
 package me.kareluo.imaging;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,6 +37,8 @@ public class IMGEditActivity extends IMGEditBaseActivity {
 
     public static final int IMG_EDIT_REQUEST_CODE = 100;
 
+    private String photoPath;
+
     @Override
     public void onCreated() {
 
@@ -53,8 +58,8 @@ public class IMGEditActivity extends IMGEditBaseActivity {
 
         IMGDecoder decoder = null;
 
-        String path = uri.getPath();
-        if (!TextUtils.isEmpty(path)) {
+        photoPath = uri.getPath();
+        if (!TextUtils.isEmpty(photoPath)) {
             switch (uri.getScheme()) {
                 case "asset":
                     decoder = new IMGAssetFileDecoder(this, uri);
@@ -132,6 +137,7 @@ public class IMGEditActivity extends IMGEditBaseActivity {
     public void onDoneClick() {
         String path = getIntent().getStringExtra(EXTRA_IMAGE_SAVE_PATH);
         if (!TextUtils.isEmpty(path)) {
+            deletePicture();
             Bitmap bitmap = mImgView.saveBitmap();
             if (bitmap != null) {
                 FileOutputStream fout = null;
@@ -158,6 +164,18 @@ public class IMGEditActivity extends IMGEditBaseActivity {
         }
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    private void deletePicture(){
+        try{
+            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            ContentResolver mContentResolver = this.getContentResolver();
+            String where = MediaStore.Images.Media.DATA + "='" + photoPath + "'";
+            //删除图片
+            mContentResolver.delete(uri, where, null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
