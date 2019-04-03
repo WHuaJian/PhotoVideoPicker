@@ -339,6 +339,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             Intent intent = new Intent(getActivity(), IMGEditActivity.class);
             intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, Uri.fromFile(new File(path)));
             intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH , saveFile.getAbsolutePath());
+            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE,true);
             startActivityForResult(intent,IMGEditActivity.IMG_EDIT_REQUEST_CODE);
         }else if(requestCode == IMGEditActivity.IMG_EDIT_REQUEST_CODE && resultCode == RESULT_OK){
             if (captureManager == null) {
@@ -404,6 +405,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             Intent intent = new Intent(getActivity(), IMGEditActivity.class);
             intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, Uri.fromFile(new File(path)));
             intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH , PickerUtils.createFilePath().getAbsolutePath());
+            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE,false);
             startActivityForResult(intent,IMGEditActivity.IMG_EDIT_REQUEST_CODE);
         }
     }

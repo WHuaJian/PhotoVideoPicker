@@ -35,6 +35,8 @@ public class IMGEditActivity extends IMGEditBaseActivity {
 
     public static final String EXTRA_IMAGE_SAVE_PATH = "IMAGE_SAVE_PATH";
 
+    public static final String IS_DELETE_OLD_PICTURE = "IS_DELETE_OLD_PICTURE";
+
     public static final int IMG_EDIT_REQUEST_CODE = 100;
 
     private String photoPath;
@@ -136,8 +138,11 @@ public class IMGEditActivity extends IMGEditBaseActivity {
     @Override
     public void onDoneClick() {
         String path = getIntent().getStringExtra(EXTRA_IMAGE_SAVE_PATH);
+        boolean isDelete = getIntent().getBooleanExtra(IS_DELETE_OLD_PICTURE, false);
         if (!TextUtils.isEmpty(path)) {
-            deletePicture();
+            if (isDelete) {
+                deletePicture();
+            }
             Bitmap bitmap = mImgView.saveBitmap();
             if (bitmap != null) {
                 FileOutputStream fout = null;
@@ -156,8 +161,8 @@ public class IMGEditActivity extends IMGEditBaseActivity {
                     }
                 }
                 Intent intent = new Intent();
-                intent.putExtra("edit_pic_path",path);
-                setResult(RESULT_OK,intent);
+                intent.putExtra("edit_pic_path", path);
+                setResult(RESULT_OK, intent);
                 finish();
                 return;
             }
@@ -166,14 +171,14 @@ public class IMGEditActivity extends IMGEditBaseActivity {
         finish();
     }
 
-    private void deletePicture(){
-        try{
+    private void deletePicture() {
+        try {
             Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             ContentResolver mContentResolver = this.getContentResolver();
             String where = MediaStore.Images.Media.DATA + "='" + photoPath + "'";
             //删除图片
             mContentResolver.delete(uri, where, null);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
