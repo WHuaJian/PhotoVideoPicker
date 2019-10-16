@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,13 +93,13 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     private boolean isCompress;
 
 
-    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit,boolean isCompress,boolean isSupportShare) {
+    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit, boolean isCompress, boolean isSupportShare) {
         PhotoPickerFragment pickerFragment = new PhotoPickerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(PHOTO_EXTRA_MAX_COUNT, max_count);
         bundle.putBoolean(SUPPORT_SHARE, isSupportShare);
-        bundle.putBoolean(IS_NEED_PIC_EDIT,isNeedPicEdit);
-        bundle.putBoolean(IS_COMPRESS,isCompress);
+        bundle.putBoolean(IS_NEED_PIC_EDIT, isNeedPicEdit);
+        bundle.putBoolean(IS_COMPRESS, isCompress);
         pickerFragment.setArguments(bundle);
         return pickerFragment;
     }
@@ -127,8 +128,8 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         setRetainInstance(true);
         maxCount = getArguments().getInt(PHOTO_EXTRA_MAX_COUNT);
         isSupportShare = getArguments().getBoolean(SUPPORT_SHARE, false);
-        isNeedPicEdit = getArguments().getBoolean(IS_NEED_PIC_EDIT,false);
-        isCompress = getArguments().getBoolean(IS_COMPRESS,false);
+        isNeedPicEdit = getArguments().getBoolean(IS_NEED_PIC_EDIT, false);
+        isCompress = getArguments().getBoolean(IS_COMPRESS, false);
         directories = new ArrayList<>();
         photoGridAdapter = new PhotoGridAdapter(getActivity(), directories);
         listAdapter = new PopupDirectoryListAdapter(getActivity(), directories);
@@ -157,7 +158,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     }
 
-    public int  getPhotoSelectNumer() {
+    public int getPhotoSelectNumer() {
         int select = 0;
         ArrayList<String> arrayList = getSelectedPhotoPaths();
         if (arrayList != null && !arrayList.isEmpty()) {
@@ -165,6 +166,26 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         }
 
         return select;
+    }
+
+    private String editPhoto = "";
+
+
+    /**
+     * 把裁剪的图片变成选中状态，并清除之前的选中
+     */
+    private void addEditPhoto(String path) {
+        try {
+            photoGridAdapter.clearSelection();
+            for (Photo photo : photoGridAdapter.getCurrentPhotos()) {
+                if (photo.getPath().equals(path)) {
+                    photoGridAdapter.getSelectedPhotos().add(photo);
+                    photoGridAdapter.notifyDataSetChanged();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initConfig() {
@@ -177,6 +198,12 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                         directories.addAll(dirs);
                         photoGridAdapter.notifyDataSetChanged();
                         listAdapter.notifyDataSetChanged();
+
+                        if (!TextUtils.isEmpty(editPhoto)) {
+                            addEditPhoto(editPhoto);
+                            editPhoto = "";
+                        }
+
                     }
 
                     @Override
@@ -206,12 +233,12 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             @Override
             public void onClick(View view) {
                 try {
-                    if(!isNeedPicEdit){
+                    if (!isNeedPicEdit) {
                         Intent intent = captureManager.dispatchTakePictureIntent();
                         startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
-                    }else{
+                    } else {
                         Intent intent = new Intent(getActivity(), CameraActivity.class);
-                        startActivityForResult(intent,CameraActivity.TAKE_PHOTO_CODE);
+                        startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -311,7 +338,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                 }
                 captureManager.galleryAddPic(path);
             }
-        }else if(requestCode == CameraActivity.TAKE_PHOTO_CODE && resultCode == RESULT_OK){
+        } else if (requestCode == CameraActivity.TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
             if (captureManager == null) {
                 FragmentActivity activity = getActivity();
                 captureManager = new ImageCaptureManager(activity);
@@ -338,18 +365,24 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
             Intent intent = new Intent(getActivity(), IMGEditActivity.class);
             intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, Uri.fromFile(new File(path)));
-            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH , saveFile.getAbsolutePath());
-            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE,true);
-            startActivityForResult(intent,IMGEditActivity.IMG_EDIT_REQUEST_CODE);
-        }else if(requestCode == IMGEditActivity.IMG_EDIT_REQUEST_CODE && resultCode == RESULT_OK){
+            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, saveFile.getAbsolutePath());
+            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE, true);
+            intent.putExtra(IMGEditActivity.IS_TAKE_PICTURE, true);
+            startActivityForResult(intent, IMGEditActivity.IMG_EDIT_REQUEST_CODE);
+        } else if (requestCode == IMGEditActivity.IMG_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
             if (captureManager == null) {
                 FragmentActivity activity = getActivity();
                 captureManager = new ImageCaptureManager(activity);
             }
             String path = data.getStringExtra("edit_pic_path");
+            boolean isTakePhoto = data.getBooleanExtra("isTakePhoto", false);
+            if (!isTakePhoto) {
+                editPhoto = path;
+            }
             captureManager.galleryAddPic(path);
         }
     }
+
 
     public PhotoGridAdapter getPhotoGridAdapter() {
         return photoGridAdapter;
@@ -381,9 +414,9 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         } else {
             mPreview.setClickable(false);
             mPreview.setEnabled(false);
-            if(isCompress){
+            if (isCompress) {
                 compressImages(getSelectedPhotoPaths());
-            }else{
+            } else {
                 Intent intent = new Intent();
                 intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, getSelectedPhotoPaths());
                 intent.putExtra(RESULT_TYPE, PHOTO);
@@ -396,7 +429,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     /**
      * 进入裁剪
      */
-    public void capturePicture(){
+    public void capturePicture() {
         if (null == getSelectedPhotoPaths() || getSelectedPhotoPaths().size() == 0) {
             toast("请选择图片");
         } else {
@@ -404,9 +437,10 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
             Intent intent = new Intent(getActivity(), IMGEditActivity.class);
             intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, Uri.fromFile(new File(path)));
-            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH , PickerUtils.createFilePath().getAbsolutePath());
-            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE,false);
-            startActivityForResult(intent,IMGEditActivity.IMG_EDIT_REQUEST_CODE);
+            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, PickerUtils.createFilePath().getAbsolutePath());
+            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE, false);
+            intent.putExtra(IMGEditActivity.IS_TAKE_PICTURE, false);
+            startActivityForResult(intent, IMGEditActivity.IMG_EDIT_REQUEST_CODE);
         }
     }
 

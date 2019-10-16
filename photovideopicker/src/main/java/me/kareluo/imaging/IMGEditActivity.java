@@ -36,6 +36,7 @@ public class IMGEditActivity extends IMGEditBaseActivity {
     public static final String EXTRA_IMAGE_SAVE_PATH = "IMAGE_SAVE_PATH";
 
     public static final String IS_DELETE_OLD_PICTURE = "IS_DELETE_OLD_PICTURE";
+    public static final String IS_TAKE_PICTURE = "IS_TAKE_PICTURE";
 
     public static final int IMG_EDIT_REQUEST_CODE = 100;
 
@@ -137,6 +138,7 @@ public class IMGEditActivity extends IMGEditBaseActivity {
 
     @Override
     public void onDoneClick() {
+        boolean isTakePhoto = getIntent().getBooleanExtra(IS_TAKE_PICTURE,false);
         String path = getIntent().getStringExtra(EXTRA_IMAGE_SAVE_PATH);
         boolean isDelete = getIntent().getBooleanExtra(IS_DELETE_OLD_PICTURE, false);
         if (!TextUtils.isEmpty(path)) {
@@ -162,6 +164,7 @@ public class IMGEditActivity extends IMGEditBaseActivity {
                 }
                 Intent intent = new Intent();
                 intent.putExtra("edit_pic_path", path);
+                intent.putExtra("isTakePhoto",isTakePhoto);
                 setResult(RESULT_OK, intent);
                 finish();
                 return;

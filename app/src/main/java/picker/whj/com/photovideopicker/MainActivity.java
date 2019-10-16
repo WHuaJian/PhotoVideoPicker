@@ -16,6 +16,7 @@ import com.whj.photovideopicker.utils.ImagePipelineConfigFactory;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import io.reactivex.functions.Consumer;
 
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onPhotoResult(ArrayList<String> photos) {
-
+                        Log.i("photos_size= ", photos.size()+"");
                     }
 
                     @Override
