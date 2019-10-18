@@ -39,15 +39,15 @@
 ```
 
 ## 引入方式
-```
-   implementation 'com.whj.picker:PhotoVideoPicker:2.0.4'
+```       
+   implementation 'com.whj.picker:PhotoVideoPicker:2.1.3'
 
 ```
 如果无法引用，在app目录build.gradle添加
 ```
    repositories {
        maven { url "https://dl.bintray.com/whj/Maven" }
-   }
+   }                      v
 
 ```
 如果编译时和其他依赖库的support有冲突，在app目录build.gradle添加
@@ -74,7 +74,7 @@
 
 ```
 
-## PhotoPicker V2.1.2更新说明：
+## PhotoPicker[ ![Download](https://api.bintray.com/packages/whj/Maven/PhotoVideoPicker/images/download.svg?version=2.1.3) ](https://bintray.com/whj/Maven/PhotoVideoPicker/2.1.3/link)更新说明：
 ```
 1、自动适配手机或Pad横竖屏展示；
 2、根据屏幕宽度动态计算列表图片宽高，展示更美观；
