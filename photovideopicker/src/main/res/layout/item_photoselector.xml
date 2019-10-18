@@ -7,10 +7,10 @@
 
     <RelativeLayout
         android:id="@+id/rl_photo"
-        android:layout_width="150dp"
-        android:layout_height="150dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <com.whj.photovideopicker.view.GridImageView
             android:id="@+id/iv_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"

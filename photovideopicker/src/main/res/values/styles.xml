@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/_5AC8FA</item>
         <item name="colorPrimaryDark">@color/_5AC8FA</item>
         <item name="colorAccent">@color/_5AC8FA</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
     </style>
 
     <style name="picker_style" parent="@style/AppTheme.Base">
@@ -34,6 +34,13 @@
         <attr name="wave_width" format="dimension"></attr>
         <attr name="wave_height" format="dimension"></attr>
     </declare-styleable>
+
+
+    <style name="photopager_translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 
 
 

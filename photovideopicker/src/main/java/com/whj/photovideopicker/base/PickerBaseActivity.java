@@ -1,6 +1,7 @@
 package com.whj.photovideopicker.base;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.LayoutRes;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.whj.photovideopicker.utils.PickerUtils;
 
 
 /**
@@ -35,11 +38,17 @@ public abstract class PickerBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(PickerUtils.isPad(this)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        } else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        }
         setContentView(viewById());
+
         bindView();
         afterView();
+        afterView(savedInstanceState);
     }
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -90,6 +99,11 @@ public abstract class PickerBaseActivity extends AppCompatActivity {
 
     @UiThread
     public abstract void afterView();
+
+    @UiThread
+    public void afterView(Bundle savedInstanceState){
+
+    };
 
     public void bindView() {
 

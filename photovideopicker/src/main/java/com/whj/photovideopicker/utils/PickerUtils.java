@@ -3,6 +3,7 @@ package com.whj.photovideopicker.utils;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -325,5 +326,16 @@ public class PickerUtils {
         }
 
         return duration;
+    }
+
+
+    public static boolean isPad(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static int getSpanNumber(Context context){
+        return isPad(context) ? 6 : 3;
     }
 }

@@ -5,8 +5,8 @@
     <string name="image_mosaic">马赛克</string>
     <string name="image_clip">裁剪</string>
     <string name="image_reset">还原</string>
-    <string name="image_done">完成</string>
-    <string name="image_cancel">取消</string>
+    <string name="image_done">保存</string>
+    <string name="image_cancel">返回</string>
     <string name="image_rotate">旋转</string>
 
     <string name="image_mosaic_tip">请直接在图片上涂抹虚化</string>

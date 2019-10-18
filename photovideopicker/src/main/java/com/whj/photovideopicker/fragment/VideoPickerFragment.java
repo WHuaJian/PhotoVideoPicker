@@ -224,7 +224,7 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
         mAlbum.setText(getResources().getText(R.string.recent_video));
 
         initShareText(0);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 6);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), PickerUtils.getSpanNumber(getActivity()));
         recyclerView.addItemDecoration(new PhotoGridAutofitDecoration(6, 5));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mVideoAdapter);

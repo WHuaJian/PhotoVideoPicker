@@ -41,7 +41,7 @@ import static com.whj.photovideopicker.PhotoPicker.VIDEO_SAVE_DIRECTORY;
  */
 
 public class PickerMainActivity extends PickerBaseActivity {
-    private TextView finishTv,topbar_right_capture;
+    private TextView finishTv;
     private ImageView mBack;
     private List<PickerBaseFragment> mFragments = new ArrayList<>();
     private List<MenuModel> menuModels = new ArrayList<>();
@@ -77,7 +77,6 @@ public class PickerMainActivity extends PickerBaseActivity {
         mBack = $(R.id.topbar_left_icon);
         viewPager = $(R.id.viewPager);
         photo_tablayout = $(R.id.photo_tablayout);
-        topbar_right_capture = $(R.id.topbar_right_capture);
     }
 
 
@@ -93,12 +92,6 @@ public class PickerMainActivity extends PickerBaseActivity {
         isCompress = getIntent().getExtras().getBoolean(IS_COMPRESS, false);
         isNeedPicEdit = getIntent().getExtras().getBoolean(IS_NEED_PIC_EDIT,false);
         modeType = getIntent().getExtras().getString(MODE_TYPE_SELECT, ALL);
-
-        if(isNeedPicEdit){
-            topbar_right_capture.setVisibility(View.VISIBLE);
-        }else{
-            topbar_right_capture.setVisibility(View.GONE);
-        }
 
         switchMode();
 
@@ -168,34 +161,10 @@ public class PickerMainActivity extends PickerBaseActivity {
             }
         });
 
-        topbar_right_capture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(currentIndex == 0){
-                    photoPickerFragment.capturePicture();
-                }
-            }
-        });
-
     }
 
     public void initRightText(int selectCount, int maxCount) {
         finishTv.setText((getString(getTextString(), selectCount, maxCount)));
-
-        if(currentIndex == 0){
-            if(selectCount == 1){
-                if(isNeedPicEdit && !modeType.equals(VIDEO)){
-                    topbar_right_capture.setVisibility(View.VISIBLE);
-                }
-                topbar_right_capture.setClickable(true);
-            }else{
-                topbar_right_capture.setVisibility(View.GONE);
-                topbar_right_capture.setClickable(false);
-            }
-        }else{
-            topbar_right_capture.setVisibility(View.GONE);
-            topbar_right_capture.setClickable(false);
-        }
     }
 
     public TextView getRightText() {

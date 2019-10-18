@@ -164,6 +164,7 @@ public class IMGEditActivity extends IMGEditBaseActivity {
                 }
                 Intent intent = new Intent();
                 intent.putExtra("edit_pic_path", path);
+                intent.putExtra("old_pic_path", photoPath);
                 intent.putExtra("isTakePhoto",isTakePhoto);
                 setResult(RESULT_OK, intent);
                 finish();

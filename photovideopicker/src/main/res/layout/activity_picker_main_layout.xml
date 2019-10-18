@@ -37,19 +37,6 @@
             app:tabTextColor="@color/_000000" />
 
         <TextView
-            android:id="@+id/topbar_right_capture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/topbar_right_icon"
-            android:textSize="16sp"
-            android:layout_marginRight="15dp"
-            android:text="@string/capture"
-            android:visibility="gone"
-            android:textColor="@color/_5AC8FA" />
-
-
-        <TextView
             android:id="@+id/topbar_right_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +46,7 @@
             android:padding="5dp"
             android:text="@string/done_with_count"
             android:textColor="@color/_5AC8FA"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

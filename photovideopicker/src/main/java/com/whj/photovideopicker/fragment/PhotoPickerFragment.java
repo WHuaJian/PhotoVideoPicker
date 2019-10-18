@@ -1,16 +1,22 @@
 package com.whj.photovideopicker.fragment;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -45,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import me.kareluo.imaging.IMGEditActivity;
@@ -122,6 +130,9 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         tv_share.setOnClickListener(this);
     }
 
+    private LocalBroadcastManager broadcastManager;
+    private PhotoEditReceiver receiver;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +157,35 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
         }
         captureManager = new ImageCaptureManager(getActivity());
+        receiver = new PhotoEditReceiver();
+        broadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        broadcastManager.registerReceiver(receiver, new IntentFilter("photo_edit"));
+    }
+
+    private class PhotoEditReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("photo_edit")) {
+                if (captureManager == null) {
+                    FragmentActivity activity = getActivity();
+                    captureManager = new ImageCaptureManager(activity);
+                }
+                String path = intent.getStringExtra("edit_pic_path");
+                String old_pic_path = intent.getStringExtra("old_pic_path");
+                isTakePhoto = intent.getBooleanExtra("isTakePhoto", false);
+
+                Photo oldPhoto = getSelectedPhoto(old_pic_path);
+                if (oldPhoto != null) {
+                    photoGridAdapter.getSelectedPhotos().remove(oldPhoto);
+                }
+
+                if (!isTakePhoto) {
+                    tempPhoto.add(path);
+                }
+                captureManager.galleryAddPic(path);
+            }
+
+        }
     }
 
     @Override
@@ -168,24 +208,45 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         return select;
     }
 
-    private String editPhoto = "";
 
+    private List<String> tempPhoto = new ArrayList<>();
+    private boolean isTakePhoto;
 
     /**
      * 把裁剪的图片变成选中状态，并清除之前的选中
      */
-    private void addEditPhoto(String path) {
+    private void addEditPhoto() {
         try {
-            photoGridAdapter.clearSelection();
-            for (Photo photo : photoGridAdapter.getCurrentPhotos()) {
-                if (photo.getPath().equals(path)) {
-                    photoGridAdapter.getSelectedPhotos().add(photo);
-                    photoGridAdapter.notifyDataSetChanged();
+            List<Photo> photos = new ArrayList<>();
+            for (String path : tempPhoto) {
+                Photo photo = getAllPhoto(path);
+                if (photo != null) {
+                    photos.add(photo);
                 }
             }
+            photoGridAdapter.getSelectedPhotos().addAll(photos);
+            photoGridAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Photo getAllPhoto(String path) {
+        for (Photo photo : photoGridAdapter.getCurrentPhotos()) {
+            if (photo.getPath().equals(path)) {
+                return photo;
+            }
+        }
+        return null;
+    }
+
+    private Photo getSelectedPhoto(String path) {
+        for (Photo photo : photoGridAdapter.getSelectedPhotos()) {
+            if (photo.getPath().equals(path)) {
+                return photo;
+            }
+        }
+        return null;
     }
 
     private void initConfig() {
@@ -199,9 +260,9 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                         photoGridAdapter.notifyDataSetChanged();
                         listAdapter.notifyDataSetChanged();
 
-                        if (!TextUtils.isEmpty(editPhoto)) {
-                            addEditPhoto(editPhoto);
-                            editPhoto = "";
+                        if (!isTakePhoto && !tempPhoto.isEmpty()) {
+                            addEditPhoto();
+                            tempPhoto.clear();
                         }
 
                     }
@@ -223,7 +284,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         mPreview.setVisibility(View.VISIBLE);
         mPreview.setText("预览");
         initShareText(0);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 6);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), PickerUtils.getSpanNumber(getActivity()));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new PhotoGridAutofitDecoration(6, 5));
         recyclerView.setAdapter(photoGridAdapter);
@@ -233,13 +294,16 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             @Override
             public void onClick(View view) {
                 try {
-                    if (!isNeedPicEdit) {
-                        Intent intent = captureManager.dispatchTakePictureIntent();
-                        startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
-                    } else {
-                        Intent intent = new Intent(getActivity(), CameraActivity.class);
+//                    if (!isNeedPicEdit) {
+//                        Intent intent = captureManager.dispatchTakePictureIntent();
+//                        startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
+//                    } else {
+//                        Intent intent = new Intent(getActivity(), CameraActivity.class);
+//                        startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
+//                    }
+
+                    Intent intent = new Intent(getActivity(), CameraActivity.class);
                         startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -345,40 +409,37 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             }
             String path = data.getStringExtra("photo_path");
             captureManager.galleryAddPic(path);
-            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-            if (!storageDir.exists()) {
-                if (!storageDir.mkdir()) {
-                    Log.e("TAG", "Throwing Errors....");
-                }
-            }
-            File saveFile = null;
-            try {
-                saveFile = File.createTempFile(
-                        UUID.randomUUID().toString(),  /* prefix */
-                        ".jpg",         /* suffix */
-                        storageDir      /* directory */
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Intent intent = new Intent(getActivity(), IMGEditActivity.class);
-            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, Uri.fromFile(new File(path)));
-            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, saveFile.getAbsolutePath());
-            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE, true);
-            intent.putExtra(IMGEditActivity.IS_TAKE_PICTURE, true);
-            startActivityForResult(intent, IMGEditActivity.IMG_EDIT_REQUEST_CODE);
+//            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//
+//            if (!storageDir.exists()) {
+//                if (!storageDir.mkdir()) {
+//                    Log.e("TAG", "Throwing Errors....");
+//                }
+//            }
+//            File saveFile = null;
+//            try {
+//                saveFile = File.createTempFile(
+//                        UUID.randomUUID().toString(),  /* prefix */
+//                        ".jpg",         /* suffix */
+//                        storageDir      /* directory */
+//                );
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            Intent intent = new Intent(getActivity(), IMGEditActivity.class);
+//            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_URI, Uri.fromFile(new File(path)));
+//            intent.putExtra(IMGEditActivity.EXTRA_IMAGE_SAVE_PATH, saveFile.getAbsolutePath());
+//            intent.putExtra(IMGEditActivity.IS_DELETE_OLD_PICTURE, true);
+//            intent.putExtra(IMGEditActivity.IS_TAKE_PICTURE, true);
+//            startActivityForResult(intent, IMGEditActivity.IMG_EDIT_REQUEST_CODE);
         } else if (requestCode == IMGEditActivity.IMG_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
             if (captureManager == null) {
                 FragmentActivity activity = getActivity();
                 captureManager = new ImageCaptureManager(activity);
             }
             String path = data.getStringExtra("edit_pic_path");
-            boolean isTakePhoto = data.getBooleanExtra("isTakePhoto", false);
-            if (!isTakePhoto) {
-                editPhoto = path;
-            }
+            isTakePhoto = data.getBooleanExtra("isTakePhoto", false);
             captureManager.galleryAddPic(path);
         }
     }
@@ -477,7 +538,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        broadcastManager.unregisterReceiver(receiver);
         if (directories == null) {
             return;
         }
@@ -510,7 +571,10 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             Intent intent = new Intent(getActivity(), PhotoPreviewActivity.class);
             intent.putExtra(PhotoPreviewActivity.KEY_FILES, arrayList);
             intent.putExtra(PhotoPreviewActivity.KEY_POSITION, 0);
+            intent.putExtra(PhotoPreviewActivity.KEY_NEED_PICEDIT, isNeedPicEdit);
             getActivity().startActivity(intent);
+            getActivity().overridePendingTransition(0, 0);
+
         } else if (viewId == R.id.tv_share) {
             ArrayList<String> arrayList = getSelectedPhotoPaths();
             if (arrayList == null || arrayList.isEmpty()) {
