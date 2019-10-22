@@ -36,6 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import me.kareluo.imaging.IMGEditActivity;
 import uk.co.senab.photoview.PhotoView;
@@ -59,6 +60,7 @@ public class PhotoPreviewActivity extends PickerBaseActivity {
     private int mPageSelectedPosition = 0;
     private TextView mPercent_all, tvImageEdit, tvBack;
     private Boolean isNeedPicEdit;
+    private List<String> tempLists = new ArrayList<>();
 
     @Override
     public int viewById() {
@@ -134,11 +136,10 @@ public class PhotoPreviewActivity extends PickerBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMGEditActivity.IMG_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
             String path = data.getStringExtra("edit_pic_path");
-            boolean isTakePhoto = data.getBooleanExtra("isTakePhoto", false);
-
             mList.set(mPageSelectedPosition, path);
             mViewPager.getAdapter().notifyDataSetChanged();
 
+            data.putExtra("originPath",tempLists.get(mPageSelectedPosition));
             data.setAction("photo_edit");
             broadcastManager.sendBroadcast(data);
         }
@@ -281,9 +282,11 @@ public class PhotoPreviewActivity extends PickerBaseActivity {
     private void initData(ArrayList<String> temps) {
 
         mList.clear();
+        tempLists.clear();
         mPhotoViews = new DragPhotoView[temps.size()];
         for (int i = 0; i < temps.size(); i++) {
             mList.add(temps.get(i));
+            tempLists.add(temps.get(i));
             mPhotoViews[i] = View.inflate(this, R.layout.photopager_item_viewpager, null).findViewById(R.id.photoView);
         }
 

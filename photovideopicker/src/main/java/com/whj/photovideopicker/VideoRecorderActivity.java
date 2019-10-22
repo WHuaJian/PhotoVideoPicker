@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.unisky.live.ULAVRecorder;
@@ -38,6 +40,10 @@ public class VideoRecorderActivity extends PickerBaseActivity {
 
     @Override
     public int viewById() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         return R.layout.tools_activity_video_recorder;
     }
 

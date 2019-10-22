@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -172,6 +174,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                 }
                 String path = intent.getStringExtra("edit_pic_path");
                 String old_pic_path = intent.getStringExtra("old_pic_path");
+                String originPath = intent.getStringExtra("originPath");
                 isTakePhoto = intent.getBooleanExtra("isTakePhoto", false);
 
                 Photo oldPhoto = getSelectedPhoto(old_pic_path);
@@ -180,7 +183,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                 }
 
                 if (!isTakePhoto) {
-                    tempPhoto.add(path);
+                    tempLists.put(originPath, path);
                 }
                 captureManager.galleryAddPic(path);
             }
@@ -209,7 +212,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     }
 
 
-    private List<String> tempPhoto = new ArrayList<>();
+    private ArrayMap<String, String> tempLists = new ArrayMap<>();
     private boolean isTakePhoto;
 
     /**
@@ -218,12 +221,13 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     private void addEditPhoto() {
         try {
             List<Photo> photos = new ArrayList<>();
-            for (String path : tempPhoto) {
-                Photo photo = getAllPhoto(path);
+            for (Map.Entry<String, String> path : tempLists.entrySet()) {
+                Photo photo = getAllPhoto(path.getValue());
                 if (photo != null) {
                     photos.add(photo);
                 }
             }
+
             photoGridAdapter.getSelectedPhotos().addAll(photos);
             photoGridAdapter.notifyDataSetChanged();
         } catch (Exception e) {
@@ -260,9 +264,9 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                         photoGridAdapter.notifyDataSetChanged();
                         listAdapter.notifyDataSetChanged();
 
-                        if (!isTakePhoto && !tempPhoto.isEmpty()) {
+                        if (!isTakePhoto && !tempLists.isEmpty()) {
                             addEditPhoto();
-                            tempPhoto.clear();
+                            tempLists.clear();
                         }
 
                     }
@@ -303,7 +307,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 //                    }
 
                     Intent intent = new Intent(getActivity(), CameraActivity.class);
-                        startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
+                    startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

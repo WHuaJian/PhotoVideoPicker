@@ -140,7 +140,7 @@ public class VideoGirdAdapter extends RecyclerView.Adapter<VideoGirdAdapter.Vide
                 }
             });
         } else {
-            holder.ivPhoto.setImageResource(R.drawable.camera);
+            holder.ivPhoto.setImageResource(R.drawable.video);
         }
     }
 
