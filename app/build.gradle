@@ -6,8 +6,8 @@ android {
         applicationId "picker.whj.com.photovideopicker"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 15
+        versionName "2.1.7"
         multiDexEnabled true
 
         ndk {

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -55,6 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 import me.kareluo.imaging.IMGEditActivity;
@@ -101,6 +103,8 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     private boolean isNeedPicEdit;
     private boolean isCompress;
+    private List<String> mTempImages = new ArrayList<>();
+    private Handler handler = new Handler();
 
 
     public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit, boolean isCompress, boolean isSupportShare) {
@@ -269,6 +273,16 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                             tempLists.clear();
                         }
 
+                        if (dirs != null && dirs.size() != 0) {
+                            for (int i = 0; i < dirs.size(); i++) {
+                                if (dirs.get(i).getPhotos() != null && dirs.get(i).getPhotos().size() != 0) {
+                                    for (int j = 0; j < dirs.get(i).getPhotos().size(); j++) {
+                                        mTempImages.add(dirs.get(i).getPhotos().get(j).getPath());
+                                    }
+                                }
+                            }
+                        }
+
                     }
 
                     @Override
@@ -411,8 +425,14 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                 FragmentActivity activity = getActivity();
                 captureManager = new ImageCaptureManager(activity);
             }
-            String path = data.getStringExtra("photo_path");
+            final String path = data.getStringExtra("photo_path");
             captureManager.galleryAddPic(path);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendBroadFalse(path);
+                }
+            }, 1000);
 //            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 //
 //            if (!storageDir.exists()) {
@@ -447,6 +467,37 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             captureManager.galleryAddPic(path);
         }
     }
+
+
+    /**
+     * 解决某些机型广播媒体库无法及时更新问题
+     */
+    private void sendBroadFalse(String imagePath) {
+        if (!mTempImages.isEmpty()) {
+            if (!mTempImages.contains(imagePath)) {
+                Photo photo = new Photo(makeVideoTempId(8), imagePath);
+                directories.get(0).getPhotos().add(0, photo);
+                photoGridAdapter.notifyDataSetChanged();
+                listAdapter.notifyDataSetChanged();
+            }
+        } else {
+            Photo photo = new Photo(makeVideoTempId(8), imagePath);
+            directories.get(0).getPhotos().add(0, photo);
+            photoGridAdapter.notifyDataSetChanged();
+            listAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private int makeVideoTempId(int max) {
+        StringBuilder str = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < max; i++) {
+            str.append(random.nextInt(10));
+        }
+        return Integer.parseInt(str.toString());
+    }
+
+
 
 
     public PhotoGridAdapter getPhotoGridAdapter() {
@@ -542,6 +593,9 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(handler != null){
+            handler.removeCallbacksAndMessages(null);
+        }
         broadcastManager.unregisterReceiver(receiver);
         if (directories == null) {
             return;
