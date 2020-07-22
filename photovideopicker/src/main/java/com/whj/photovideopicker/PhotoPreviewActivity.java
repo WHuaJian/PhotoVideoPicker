@@ -1,6 +1,5 @@
 package com.whj.photovideopicker;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,22 +8,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.whj.photovideopicker.base.PickerBaseActivity;
-import com.whj.photovideopicker.utils.ImageCaptureManager;
 import com.whj.photovideopicker.utils.PickerUtils;
 import com.whj.photovideopicker.view.DragPhotoView;
 import com.whj.photovideopicker.view.PhotoViewPager;

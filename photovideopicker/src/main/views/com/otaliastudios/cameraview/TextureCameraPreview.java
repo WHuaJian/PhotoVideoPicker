@@ -3,7 +3,7 @@ package com.otaliastudios.cameraview;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;

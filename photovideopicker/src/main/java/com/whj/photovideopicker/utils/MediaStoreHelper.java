@@ -4,9 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.whj.photovideopicker.R;
 import com.whj.photovideopicker.fragment.PhotoPickerFragment;
@@ -35,14 +36,15 @@ public class MediaStoreHelper {
     public static void getPhotoDirs(Fragment fragment, Bundle args, PhotosResultCallback resultCallback) {
 
         fragment.getLoaderManager()
-                .initLoader(0, args, new PhotoDirLoaderCallbacks(fragment.getActivity(), resultCallback,MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE));
+                .initLoader(0, args, new PhotoDirLoaderCallbacks(fragment.getActivity(), resultCallback, MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE));
     }
 
-    public static void getVideoDirs(Fragment fragment, Bundle args, VideosResultCallback resultCallback ) {
+    public static void getVideoDirs(Fragment fragment, Bundle args, VideosResultCallback resultCallback) {
 
         fragment.getLoaderManager()
-                .initLoader(1, args, new PhotoDirLoaderCallbacks(fragment.getActivity(), resultCallback,MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO));
+                .initLoader(1, args, new PhotoDirLoaderCallbacks(fragment.getActivity(), resultCallback, MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO));
     }
+
     static class PhotoDirLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
 
         private Context context;
@@ -55,11 +57,13 @@ public class MediaStoreHelper {
             this.resultCallback = resultCallback;
             this.mType = type;
         }
+
         public PhotoDirLoaderCallbacks(Context context, VideosResultCallback resultCallback, int type) {
             this.context = context;
             this.videosCallback = resultCallback;
             this.mType = type;
         }
+
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -72,16 +76,19 @@ public class MediaStoreHelper {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
             if (data == null) return;
             if (mType == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) {
                 List<PhotoDirectory> directories = new ArrayList<>();
                 PhotoDirectory photoDirectoryAll = new PhotoDirectory();
                 photoDirectoryAll.setName(context.getString(R.string.recent_photos));
                 photoDirectoryAll.setId("ALL");
-                while (data.moveToNext()) {
-                    initPhotoDirectory(data, directories, photoDirectoryAll);
+
+                if (data.moveToFirst()) {
+                    do{
+                        initPhotoDirectory(data, directories, photoDirectoryAll);
+                    }while(data.moveToNext());
                 }
+
 
                 if (photoDirectoryAll.getPhotoPaths().size() > 0) {
                     photoDirectoryAll.setCoverPath(photoDirectoryAll.getPhotoPaths().get(0));
@@ -96,9 +103,12 @@ public class MediaStoreHelper {
                 VideoDirectory videoDirectoryAll = new VideoDirectory();
                 videoDirectoryAll.setName(context.getString(R.string.recent_video));
                 videoDirectoryAll.setId("ALL");
-                while (data.moveToNext()) {
-                    initVideoDirectory(data, directories, videoDirectoryAll);
+                if (data.moveToFirst()) {
+                    do{
+                        initVideoDirectory(data, directories, videoDirectoryAll);
+                    }while(data.moveToNext());
                 }
+
                 if (videoDirectoryAll.getVideoPaths().size() > 0) {
                     videoDirectoryAll.setCoverPath(videoDirectoryAll.getVideoPaths().get(0));
                 }
@@ -115,7 +125,7 @@ public class MediaStoreHelper {
     }
 
     private static void initVideoDirectory(Cursor data, List<VideoDirectory> directories, VideoDirectory videoDirectoryAll) {
-        try{
+        try {
             int vedioId = data.getInt(data.getColumnIndexOrThrow(_ID));
             String vedioBucketId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
             String directoryName = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
@@ -130,21 +140,21 @@ public class MediaStoreHelper {
 
             if (!directories.contains(videoDirectory)) {
                 videoDirectory.setCoverPath(path);
-                videoDirectory.addVideo(vedioId, path,duration,size,directoryName);
+                videoDirectory.addVideo(vedioId, path, duration, size, directoryName);
                 videoDirectory.setDateAdded(data.getLong(data.getColumnIndexOrThrow(DATE_ADDED)));
                 directories.add(videoDirectory);
             } else {
-                directories.get(directories.indexOf(videoDirectory)).addVideo(vedioId, path,duration,size,videoName);
+                directories.get(directories.indexOf(videoDirectory)).addVideo(vedioId, path, duration, size, videoName);
             }
 
-            videoDirectoryAll.addVideo(vedioId, path,duration,size,videoName);
-        }catch (IllegalArgumentException e){
+            videoDirectoryAll.addVideo(vedioId, path, duration, size, videoName);
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
 
     private static void initPhotoDirectory(Cursor data, List<PhotoDirectory> directories, PhotoDirectory photoDirectoryAll) {
-        try{
+        try {
             int imageId = data.getInt(data.getColumnIndexOrThrow(_ID));
             String bucketId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
             String name = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
@@ -164,7 +174,7 @@ public class MediaStoreHelper {
             }
 
             photoDirectoryAll.addPhoto(imageId, path);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
@@ -172,8 +182,10 @@ public class MediaStoreHelper {
 
     public interface PhotosResultCallback {
         void onResultCallback(List<PhotoDirectory> directories);
+
         void onResultPhotosClallback(List<Photo> photoList);
     }
+
     public interface VideosResultCallback {
         void onResultCallback(List<VideoDirectory> directories);
     }

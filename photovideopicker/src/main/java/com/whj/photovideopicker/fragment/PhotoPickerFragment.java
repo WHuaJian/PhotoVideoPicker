@@ -8,26 +8,23 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.collection.ArrayMap;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -51,13 +48,10 @@ import com.whj.photovideopicker.utils.PhotoGridAutofitDecoration;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
-import java.util.UUID;
 
 import me.kareluo.imaging.IMGEditActivity;
 
@@ -138,6 +132,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     private LocalBroadcastManager broadcastManager;
     private PhotoEditReceiver receiver;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -263,25 +258,26 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                 new MediaStoreHelper.PhotosResultCallback() {
                     @Override
                     public void onResultCallback(List<PhotoDirectory> dirs) {
-                        directories.clear();
-                        directories.addAll(dirs);
-                        photoGridAdapter.notifyDataSetChanged();
-                        listAdapter.notifyDataSetChanged();
+                            directories.clear();
+                            directories.addAll(dirs);
+                            photoGridAdapter.notifyDataSetChanged();
+                            listAdapter.notifyDataSetChanged();
 
-                        if (!isTakePhoto && !tempLists.isEmpty()) {
-                            addEditPhoto();
-                            tempLists.clear();
-                        }
+                            if (!isTakePhoto && !tempLists.isEmpty()) {
+                                addEditPhoto();
+                                tempLists.clear();
+                            }
 
-                        if (dirs != null && dirs.size() != 0) {
-                            for (int i = 0; i < dirs.size(); i++) {
-                                if (dirs.get(i).getPhotos() != null && dirs.get(i).getPhotos().size() != 0) {
-                                    for (int j = 0; j < dirs.get(i).getPhotos().size(); j++) {
-                                        mTempImages.add(dirs.get(i).getPhotos().get(j).getPath());
+                            if (dirs != null && dirs.size() != 0) {
+                                for (int i = 0; i < dirs.size(); i++) {
+                                    if (dirs.get(i).getPhotos() != null && dirs.get(i).getPhotos().size() != 0) {
+                                        for (int j = 0; j < dirs.get(i).getPhotos().size(); j++) {
+                                            mTempImages.add(dirs.get(i).getPhotos().get(j).getPath());
+                                        }
                                     }
                                 }
                             }
-                        }
+
 
                     }
 

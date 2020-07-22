@@ -2,11 +2,10 @@ package com.whj.photovideopicker;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 import com.whj.photovideopicker.listener.OnResultListener;
 import com.whj.photovideopicker.utils.OnResultRequest;
-import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

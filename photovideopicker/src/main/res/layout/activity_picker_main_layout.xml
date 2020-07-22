@@ -22,7 +22,7 @@
             android:layout_marginLeft="10dp"
             android:src="@mipmap/pick_back"/>
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/photo_tablayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         android:layout_height="1dp"
         android:background="@color/_e2e2e2" />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

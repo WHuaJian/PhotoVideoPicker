@@ -1,7 +1,7 @@
 package com.whj.photovideopicker.adapter;
 
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.whj.photovideopicker.model.Photo;
 import com.whj.photovideopicker.model.PhotoDirectory;

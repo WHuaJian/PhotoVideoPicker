@@ -2,21 +2,18 @@ package picker.whj.com.photovideopicker;
 
 import android.Manifest;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.whj.photovideopicker.PhotoPicker;
 import com.whj.photovideopicker.listener.OnResultListener;
 import com.whj.photovideopicker.utils.ImagePipelineConfigFactory;
-import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import io.reactivex.functions.Consumer;
 

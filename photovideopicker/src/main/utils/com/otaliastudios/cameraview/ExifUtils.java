@@ -1,7 +1,7 @@
 package com.otaliastudios.cameraview;
 
 
-import android.support.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 
 // TODO unused.
 class ExifUtils {
