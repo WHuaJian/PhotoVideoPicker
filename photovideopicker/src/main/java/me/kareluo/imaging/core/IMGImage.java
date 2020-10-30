@@ -21,6 +21,8 @@ import me.kareluo.imaging.core.homing.IMGHoming;
 import me.kareluo.imaging.core.sticker.IMGSticker;
 import me.kareluo.imaging.core.util.IMGUtils;
 
+import static me.kareluo.imaging.core.IMGPath.BASE_DOODLE_WIDTH;
+
 /**
  * Created by felix on 2017/11/21 下午10:03.
  */
@@ -133,9 +135,9 @@ public class IMGImage {
         // Doodle&Mosaic 's paint
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(IMGPath.BASE_DOODLE_WIDTH);
+        mPaint.setStrokeWidth(BASE_DOODLE_WIDTH);
         mPaint.setColor(Color.RED);
-        mPaint.setPathEffect(new CornerPathEffect(IMGPath.BASE_DOODLE_WIDTH));
+        mPaint.setPathEffect(new CornerPathEffect(BASE_DOODLE_WIDTH));
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
     }
@@ -564,6 +566,7 @@ public class IMGImage {
                 path.onDrawDoodle(canvas, mPaint);
             }
             canvas.restore();
+
         }
     }
 

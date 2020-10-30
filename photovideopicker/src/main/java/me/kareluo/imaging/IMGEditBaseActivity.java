@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.ViewSwitcher;
 
 import com.whj.photovideopicker.R;
@@ -14,6 +15,9 @@ import me.kareluo.imaging.core.IMGMode;
 import me.kareluo.imaging.core.IMGText;
 import me.kareluo.imaging.view.IMGColorGroup;
 import me.kareluo.imaging.view.IMGView;
+import me.kareluo.imaging.view.VerticalSeekBar;
+
+import static me.kareluo.imaging.core.IMGPath.BASE_DOODLE_WIDTH;
 
 
 /**
@@ -33,6 +37,8 @@ abstract class IMGEditBaseActivity extends Activity implements View.OnClickListe
     private IMGTextEditDialog mTextDialog;
 
     private View mLayoutOpSub;
+
+    private VerticalSeekBar seekbar;
 
     private ViewSwitcher mOpSwitcher, mOpSubSwitcher;
 
@@ -68,11 +74,37 @@ abstract class IMGEditBaseActivity extends Activity implements View.OnClickListe
 
         mOpSwitcher = findViewById(R.id.vs_op);
         mOpSubSwitcher = findViewById(R.id.vs_op_sub);
+        seekbar = findViewById(R.id.seekbar);
 
         mColorGroup = findViewById(R.id.cg_colors);
         mColorGroup.setOnCheckedChangeListener(this);
 
         mLayoutOpSub = findViewById(R.id.layout_op_sub);
+
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                BASE_DOODLE_WIDTH = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    public void showSeekbar(boolean isShow){
+        if(isShow){
+            seekbar.setVisibility(View.VISIBLE);
+        } else {
+            seekbar.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
-
-
-       <TextView
-           android:id="@+id/tvBack"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:gravity="center"
-           android:padding="5dp"
-           android:text="返回"
-           android:textColor="#ffffff"
-           android:textSize="16sp" />
-
-       <TextView
-           android:id="@+id/page_all"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_centerInParent="true"
-           android:gravity="center"
-           android:padding="5dp"
-           android:text="1/2"
-           android:textColor="#ffffff"
-           android:textSize="16sp" />
-
-       <TextView
-           android:id="@+id/tvImageEdit"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_centerInParent="true"
-           android:layout_alignParentRight="true"
-           android:gravity="center"
-           android:padding="5dp"
-           android:text="编辑"
-           android:textColor="#ffffff"
-           android:textSize="16sp" />
-
-   </RelativeLayout>
-
     <com.whj.photovideopicker.view.PhotoViewPager
         android:id="@+id/images"
+        android:background="@color/_e2e2e2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/tvBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="返回"
+            android:padding="10dp"
+            android:background="#50333333"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/page_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="1/2"
+            android:background="#50333333"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvImageEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:background="#50333333"
+            android:text="编辑"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
