@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 15
-        versionName "2.2.2"
+        versionCode 16
+        versionName "2.2.3"
     }
 
     buildTypes {
@@ -56,7 +56,7 @@ publish {
     groupId = 'com.whj.picker'
     artifactId = 'PhotoVideoPicker'
     repoName = 'Maven'
-    publishVersion = '2.2.2'
+    publishVersion = '2.2.3'
     desc = 'photo and video select'
     licences = ['Apache-2.0']
 

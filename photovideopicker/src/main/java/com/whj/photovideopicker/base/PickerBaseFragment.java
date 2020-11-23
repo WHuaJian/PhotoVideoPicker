@@ -78,7 +78,7 @@ public abstract class PickerBaseFragment extends Fragment {
 
     @UiThread
     public void toast(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     private boolean hasEntered;
