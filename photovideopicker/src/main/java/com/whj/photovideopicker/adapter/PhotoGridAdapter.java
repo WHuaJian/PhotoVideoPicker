@@ -87,25 +87,6 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             } else {
                 photo = photos.get(position);
             }
-//            Uri uri = Uri.parse("file://" + photo.getPath());
-//            ImageDecodeOptions decodeOptions = ImageDecodeOptions.newBuilder()
-//                    .build();
-//
-//            ImageRequest request = ImageRequestBuilder
-//                    .newBuilderWithSource(uri)
-//                    .setImageDecodeOptions(decodeOptions)
-//                    .setAutoRotateEnabled(true)
-////                    .setImageDecodeOptions(ImageDecodeOptions.newBuilder().setDecodeAllFrames(true).build())
-////                    .setImageType(ImageRequest.ImageType.SMALL)TODO... 待修改
-//                    .setResizeOptions(new ResizeOptions(holder.ivPhoto.getLayoutParams().width, holder.ivPhoto.getLayoutParams().height))
-//                    .build();
-//
-//            DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                    .setOldController(holder.ivPhoto.getController())
-//                    .setImageRequest(request)
-//                    .build();
-//
-//            holder.ivPhoto.setController(controller);
 
             PickerUtils.showThumb(holder.ivPhoto, "file://" + photo.getPath());
 

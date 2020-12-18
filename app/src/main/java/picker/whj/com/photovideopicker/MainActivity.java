@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.whj.photovideopicker.PhotoPicker;
 import com.whj.photovideopicker.listener.OnResultListener;
@@ -23,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Fresco.initialize(getApplication(), ImagePipelineConfigFactory.getImagePipelineConfig(getApplication()));
-
 
         RxPermissions permissions = new RxPermissions(this);
         permissions.request(Manifest.permission.CAMERA

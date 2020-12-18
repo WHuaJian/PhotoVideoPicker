@@ -2,6 +2,8 @@ package com.whj.photovideopicker;
 
 import android.content.Intent;
 import android.os.Environment;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -15,6 +17,7 @@ import com.whj.photovideopicker.base.PickerBaseFragment;
 import com.whj.photovideopicker.fragment.PhotoPickerFragment;
 import com.whj.photovideopicker.fragment.VideoPickerFragment;
 import com.whj.photovideopicker.model.MenuModel;
+import com.whj.photovideopicker.utils.ImagePipelineConfigFactory;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
@@ -82,6 +85,8 @@ public class PickerMainActivity extends PickerBaseActivity {
 
     @Override
     public void afterView() {
+        Fresco.initialize(getApplication(), ImagePipelineConfigFactory.getImagePipelineConfig(getApplication()));
+
         DEFAULT_VIDEO_SAVE_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
 
         maxPhotoCount = getIntent().getIntExtra(PHOTO_EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
