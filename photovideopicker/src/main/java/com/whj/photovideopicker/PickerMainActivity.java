@@ -158,10 +158,20 @@ public class PickerMainActivity extends PickerBaseActivity {
         finishTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentIndex == 0){
-                    photoPickerFragment.finishChooseImg();
-                }else{
-                    videoPickerFragment.finishChooseVideo();
+                switch (modeType) {
+                    case PHOTO:
+                        photoPickerFragment.finishChooseImg();
+                        break;
+                    case VIDEO:
+                        videoPickerFragment.finishChooseVideo();
+                        break;
+                    case ALL:
+                        if(currentIndex == 0){
+                            photoPickerFragment.finishChooseImg();
+                        }else{
+                            videoPickerFragment.finishChooseVideo();
+                        }
+                        break;
                 }
             }
         });

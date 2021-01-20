@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onVideoResult(ArrayList<String> videos) {
+                        Log.i("photos_size= ", videos.size()+"");
 
                     }
 
