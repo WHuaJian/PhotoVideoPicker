@@ -6,8 +6,10 @@
         <item name="colorPrimary">@color/_ffffff</item>
         <item name="colorPrimaryDark">@color/_ffffff</item>
         <item name="colorAccent">@color/_ffffff</item>
+
+        <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowIsTranslucent">false</item>
-        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
 

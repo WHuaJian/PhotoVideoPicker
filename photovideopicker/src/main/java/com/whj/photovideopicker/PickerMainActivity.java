@@ -152,7 +152,8 @@ public class PickerMainActivity extends PickerBaseActivity {
             }
         });
         initRightText(0, maxPhotoCount);
-        PickerUtils.setTabIndicatorWidth(this, photo_tablayout);
+//        PickerUtils.setTabIndicatorWidth(this, photo_tablayout);
+        photo_tablayout.setSelectedTabIndicatorHeight(0);
         setTabLayout();
 
         finishTv.setOnClickListener(new View.OnClickListener() {

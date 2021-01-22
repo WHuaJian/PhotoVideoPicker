@@ -18,6 +18,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.whj.photovideopicker.R;
+import com.whj.photovideopicker.utils.PickerBarUtil;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.lang.reflect.Field;
@@ -55,12 +57,22 @@ public abstract class PickerBaseActivity extends AppCompatActivity {
         } else{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         }
+        initStatusBar();
         setContentView(viewById());
 
         bindView();
         afterView();
         afterView(savedInstanceState);
     }
+
+    private void initStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            PickerBarUtil.setStatusBarColor(this, R.color._ffffff);
+        }
+    }
+
 
     @Override
     public void setRequestedOrientation(int requestedOrientation) {

@@ -39,8 +39,8 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-//    implementation project(':photovideopicker')
-    implementation 'com.whj.picker:PhotoVideoPicker:2.2.6'
+    implementation project(':photovideopicker')
+//    implementation 'com.whj.picker:PhotoVideoPicker:2.2.7'
     implementation 'androidx.appcompat:appcompat:1.0.0'
 //    implementation 'com.github.WHuaJian:PhotoVideoPicker:V2.2.6'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'

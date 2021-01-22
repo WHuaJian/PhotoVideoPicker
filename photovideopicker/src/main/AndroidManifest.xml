@@ -2,6 +2,7 @@
     package="com.whj.photovideopicker" >
 
     <application
+        android:theme="@style/AppTheme"
         android:supportsRtl="true"
         android:allowBackup="true">
 
