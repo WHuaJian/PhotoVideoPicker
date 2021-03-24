@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,16 +95,16 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
 
     RecyclerView recyclerView;
-    TextView mAlbum, tv_share,tv_finish;
+    TextView mAlbum, tv_share, tv_finish;
     TextView mPreview;
 
-    private boolean isNeedPicEdit,isTouping;
+    private boolean isNeedPicEdit, isTouping;
     private boolean isCompress;
     private List<String> mTempImages = new ArrayList<>();
     private Handler handler = new Handler();
 
 
-    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit, boolean isCompress, boolean isSupportShare,boolean isTouping) {
+    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit, boolean isCompress, boolean isSupportShare, boolean isTouping) {
         PhotoPickerFragment pickerFragment = new PhotoPickerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(PHOTO_EXTRA_MAX_COUNT, max_count);
@@ -185,7 +187,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                     FragmentActivity activity = getActivity();
                     captureManager = new ImageCaptureManager(activity);
                 }
-                String path = intent.getStringExtra("edit_pic_path");
+                final String path = intent.getStringExtra("edit_pic_path");
                 String old_pic_path = intent.getStringExtra("old_pic_path");
                 String originPath = intent.getStringExtra("originPath");
                 isTakePhoto = intent.getBooleanExtra("isTakePhoto", false);
@@ -199,6 +201,12 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                     tempLists.put(originPath, path);
                 }
                 captureManager.galleryAddPic(path);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendBroadFalse(path);
+                    }
+                }, 1000);
             }
 
         }
@@ -233,15 +241,14 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
      */
     private void addEditPhoto() {
         try {
-            List<Photo> photos = new ArrayList<>();
             for (Map.Entry<String, String> path : tempLists.entrySet()) {
                 Photo photo = getAllPhoto(path.getValue());
                 if (photo != null) {
-                    photos.add(photo);
+                    if(!photoGridAdapter.getSelectedPhotos().contains(photo)){
+                        photoGridAdapter.getSelectedPhotos().add(photo);
+                    }
                 }
             }
-
-            photoGridAdapter.getSelectedPhotos().addAll(photos);
             photoGridAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -272,25 +279,26 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
                 new MediaStoreHelper.PhotosResultCallback() {
                     @Override
                     public void onResultCallback(List<PhotoDirectory> dirs) {
-                            directories.clear();
-                            directories.addAll(dirs);
-                            photoGridAdapter.notifyDataSetChanged();
-                            listAdapter.notifyDataSetChanged();
+                        mTempImages.clear();
+                        directories.clear();
+                        directories.addAll(dirs);
+                        photoGridAdapter.notifyDataSetChanged();
+                        listAdapter.notifyDataSetChanged();
+                        Log.i("photo-size ", "" + directories.get(0).getPhotos().size() + "   " + photoGridAdapter.getCurrentPhotos().size());
+                        if (!isTakePhoto && !tempLists.isEmpty()) {
+                            addEditPhoto();
+//                            tempLists.clear();
+                        }
 
-                            if (!isTakePhoto && !tempLists.isEmpty()) {
-                                addEditPhoto();
-                                tempLists.clear();
-                            }
-
-                            if (dirs != null && dirs.size() != 0) {
-                                for (int i = 0; i < dirs.size(); i++) {
-                                    if (dirs.get(i).getPhotos() != null && dirs.get(i).getPhotos().size() != 0) {
-                                        for (int j = 0; j < dirs.get(i).getPhotos().size(); j++) {
-                                            mTempImages.add(dirs.get(i).getPhotos().get(j).getPath());
-                                        }
+                        if (dirs != null && dirs.size() != 0) {
+                            for (int i = 0; i < dirs.size(); i++) {
+                                if (dirs.get(i).getPhotos() != null && dirs.get(i).getPhotos().size() != 0) {
+                                    for (int j = 0; j < dirs.get(i).getPhotos().size(); j++) {
+                                        mTempImages.add(dirs.get(i).getPhotos().get(j).getPath());
                                     }
                                 }
                             }
+                        }
 
 
                     }
@@ -510,8 +518,6 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     }
 
 
-
-
     public PhotoGridAdapter getPhotoGridAdapter() {
         return photoGridAdapter;
     }
@@ -605,7 +611,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(handler != null){
+        if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
         broadcastManager.unregisterReceiver(receiver);
@@ -656,7 +662,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             intent.putExtra(RESULT_TYPE, PHOTO_SHARE);
             getActivity().setResult(RESULT_OK, intent);
             getActivity().finish();
-        } else if (viewId == R.id.tv_finish){
+        } else if (viewId == R.id.tv_finish) {
             finishChooseImg();
         }
     }

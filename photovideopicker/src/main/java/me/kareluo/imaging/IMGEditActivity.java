@@ -161,6 +161,9 @@ public class IMGEditActivity extends IMGEditBaseActivity {
                             e.printStackTrace();
                         }
                     }
+                    if(!TextUtils.isEmpty(path)){
+                        updatePicture(path);
+                    }
                 }
                 Intent intent = new Intent();
                 intent.putExtra("edit_pic_path", path);
@@ -173,6 +176,21 @@ public class IMGEditActivity extends IMGEditBaseActivity {
         }
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+
+    private void updatePicture(String path){
+        // 其次把文件插入到系统图库
+        File file = new File(path);
+        try {
+            MediaStore.Images.Media.insertImage(this.getContentResolver(),
+                    file.getAbsolutePath(), file.getName(), null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // 最后通知图库更新
+        this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.fromFile(new File(file.getPath()))));
     }
 
     private void deletePicture() {
