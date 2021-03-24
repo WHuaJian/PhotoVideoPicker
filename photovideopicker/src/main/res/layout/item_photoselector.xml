@@ -3,6 +3,7 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="#FF8E929D"
     android:id="@+id/iv_root">
 
     <RelativeLayout
@@ -14,12 +15,12 @@
             android:id="@+id/iv_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            fresco:fadeDuration="500"
-            fresco:progressBarImage="@mipmap/loading"
-            fresco:progressBarImageScaleType="centerInside"
-            fresco:progressBarAutoRotateInterval="5000"
-            fresco:failureImage="@mipmap/photo_default_bg" />
+            android:scaleType="centerCrop"  />
+<!--            fresco:fadeDuration="300"-->
+<!--            fresco:progressBarImage="@mipmap/loading"-->
+<!--            fresco:progressBarImageScaleType="centerInside"-->
+<!--            fresco:progressBarAutoRotateInterval="1000"-->
+<!--            fresco:failureImage="@mipmap/photo_default_bg" />-->
 
         <TextView
             android:id="@+id/tvVideoTime"

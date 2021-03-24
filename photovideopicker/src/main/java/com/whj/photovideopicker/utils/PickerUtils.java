@@ -10,23 +10,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+
 import com.google.android.material.tabs.TabLayout;
+import com.whj.photovideopicker.R;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ImageDecodeOptions;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.image.ImageInfo;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,55 +37,62 @@ import java.util.UUID;
 public class PickerUtils {
 
 
-    /**
-     * 显示缩略图
-     *
-     * @param draweeView     draweeView
-     * @param url            url
-     * @param resizeWidthDp  resizeWidth
-     * @param resizeHeightDp resizeHeight
-     */
-    public static void showThumb(SimpleDraweeView draweeView, String url, int resizeWidthDp, int resizeHeightDp) {
-        if (url == null || "".equals(url))
-            return;
-        if (draweeView == null)
-            return;
-        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
-                .setResizeOptions(new ResizeOptions(dip2px(draweeView.getContext(), resizeWidthDp), dip2px(draweeView.getContext(), resizeHeightDp)))
-                .build();
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(request)
-                .setOldController(draweeView.getController())
-                .setControllerListener(new BaseControllerListener<ImageInfo>())
-                .build();
-        draweeView.setController(controller);
-    }
+//    /**
+//     * 显示缩略图
+//     *
+//     * @param draweeView     draweeView
+//     * @param url            url
+//     * @param resizeWidthDp  resizeWidth
+//     * @param resizeHeightDp resizeHeight
+//     */
+//    public static void showThumb(SimpleDraweeView draweeView, String url, int resizeWidthDp, int resizeHeightDp) {
+//        if (url == null || "".equals(url))
+//            return;
+//        if (draweeView == null)
+//            return;
+//        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
+//                .setResizeOptions(new ResizeOptions(dip2px(draweeView.getContext(), resizeWidthDp), dip2px(draweeView.getContext(), resizeHeightDp)))
+//                .build();
+//        DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                .setImageRequest(request)
+//                .setOldController(draweeView.getController())
+//                .setControllerListener(new BaseControllerListener<ImageInfo>())
+//                .build();
+//        draweeView.setController(controller);
+//    }
+//
+//    public static void loadImage(SimpleDraweeView simpleDraweeView, String url, int width, int height) {
+//        ImageDecodeOptions decodeOptions = ImageDecodeOptions.newBuilder()
+//                .build();
+//        ImageRequestBuilder requestBuilder = ImageRequestBuilder
+//                .newBuilderWithSource(Uri.parse(url))
+//                .setImageDecodeOptions(decodeOptions)
+//                .setProgressiveRenderingEnabled(true)
+//                .setAutoRotateEnabled(true);
+//        if (width > 0 && height > 0) {
+//            requestBuilder.setResizeOptions(new ResizeOptions(width, height));
+//        }
+//        DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                .setOldController(simpleDraweeView.getController())
+//                .setImageRequest(requestBuilder.build())
+//                .build();
+//        simpleDraweeView.setController(controller);
+//    }
+//
+//    public static void loadImage(SimpleDraweeView simpleDraweeView, String url) {
+//        loadImage(simpleDraweeView, url, simpleDraweeView.getLayoutParams().width, simpleDraweeView.getLayoutParams().height);
+//
+//    }
 
-    public static void loadImage(SimpleDraweeView simpleDraweeView, String url, int width, int height) {
-        ImageDecodeOptions decodeOptions = ImageDecodeOptions.newBuilder()
-                .build();
-        ImageRequestBuilder requestBuilder = ImageRequestBuilder
-                .newBuilderWithSource(Uri.parse(url))
-                .setImageDecodeOptions(decodeOptions)
-                .setProgressiveRenderingEnabled(true)
-                .setAutoRotateEnabled(true);
-        if (width > 0 && height > 0) {
-            requestBuilder.setResizeOptions(new ResizeOptions(width, height));
-        }
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setOldController(simpleDraweeView.getController())
-                .setImageRequest(requestBuilder.build())
-                .build();
-        simpleDraweeView.setController(controller);
-    }
+//    public static void showThumb(SimpleDraweeView simpleDraweeView, String url) {
+//        showThumb(simpleDraweeView, url, simpleDraweeView.getLayoutParams().width, simpleDraweeView.getLayoutParams().height);
+//    }
 
-    public static void loadImage(SimpleDraweeView simpleDraweeView, String url) {
-        loadImage(simpleDraweeView, url, simpleDraweeView.getLayoutParams().width, simpleDraweeView.getLayoutParams().height);
-
-    }
-
-    public static void showThumb(SimpleDraweeView simpleDraweeView, String url) {
-        showThumb(simpleDraweeView, url, simpleDraweeView.getLayoutParams().width, simpleDraweeView.getLayoutParams().height);
+    public static void loadImage(Context context, ImageView imageView, String path) {
+        GlideApp.with(context)
+                .load(path)
+                .placeholder(R.mipmap.photo_default_bg)
+                .into(imageView);
     }
 
     public static float getSizeInMB(long sizeInBytes) {
@@ -281,6 +282,7 @@ public class PickerUtils {
 
     /**
      * 根据uri获取真实路径
+     *
      * @param context
      * @param uri
      * @return
@@ -310,6 +312,7 @@ public class PickerUtils {
 
     /**
      * 根据uri获取视频时长
+     *
      * @param context
      * @param uri
      * @return
@@ -335,7 +338,7 @@ public class PickerUtils {
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    public static int getSpanNumber(Context context){
-        return isPad(context) ? 6 : 3;
+    public static int getSpanNumber(Context context) {
+        return  7;
     }
 }

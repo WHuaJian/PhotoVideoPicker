@@ -52,12 +52,12 @@ public abstract class PickerBaseActivity extends AppCompatActivity {
             Log.i("BaseActivity", "onCreate fixOrientation when Oreo, result = " + result);
         }
         super.onCreate(savedInstanceState);
-        if(PickerUtils.isPad(this)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        } else{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-        }
-        initStatusBar();
+//        if(PickerUtils.isPad(this)){
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+//        } else{
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+//        }
+//        initStatusBar();
         setContentView(viewById());
 
         bindView();

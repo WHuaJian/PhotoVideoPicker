@@ -3,11 +3,16 @@ package com.whj.photovideopicker;
 import android.content.Intent;
 import android.os.Environment;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +22,6 @@ import com.whj.photovideopicker.base.PickerBaseFragment;
 import com.whj.photovideopicker.fragment.PhotoPickerFragment;
 import com.whj.photovideopicker.fragment.VideoPickerFragment;
 import com.whj.photovideopicker.model.MenuModel;
-import com.whj.photovideopicker.utils.ImagePipelineConfigFactory;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
@@ -71,6 +75,11 @@ public class PickerMainActivity extends PickerBaseActivity {
 
     @Override
     public int viewById() {
+        if(!PickerUtils.isPad(this)){
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         return R.layout.activity_picker_main_layout;
     }
 
@@ -85,8 +94,6 @@ public class PickerMainActivity extends PickerBaseActivity {
 
     @Override
     public void afterView() {
-        Fresco.initialize(getApplication(), ImagePipelineConfigFactory.getImagePipelineConfig(getApplication()));
-
         DEFAULT_VIDEO_SAVE_DIRECTORY = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
 
         maxPhotoCount = getIntent().getIntExtra(PHOTO_EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
@@ -106,8 +113,8 @@ public class PickerMainActivity extends PickerBaseActivity {
      * 三种模式
      */
     private void switchMode() {
-        photoPickerFragment = PhotoPickerFragment.newInstance(maxPhotoCount, isNeedPicEdit,isCompress,isSupportShare);
-        videoPickerFragment = VideoPickerFragment.newInstance(maxVideoCount, videoDirectory, isSupportShare);
+        photoPickerFragment = PhotoPickerFragment.newInstance(maxPhotoCount, isNeedPicEdit,isCompress,isSupportShare,isTouping);
+        videoPickerFragment = VideoPickerFragment.newInstance(maxVideoCount, videoDirectory, isSupportShare,isTouping);
         switch (modeType) {
             case PHOTO:
                 mFragments.add(photoPickerFragment);
@@ -153,39 +160,49 @@ public class PickerMainActivity extends PickerBaseActivity {
         });
         initRightText(0, maxPhotoCount);
 //        PickerUtils.setTabIndicatorWidth(this, photo_tablayout);
-        photo_tablayout.setSelectedTabIndicatorHeight(0);
+//        photo_tablayout.setSelectedTabIndicatorHeight(0);
         setTabLayout();
 
-        finishTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (modeType) {
-                    case PHOTO:
-                        photoPickerFragment.finishChooseImg();
-                        break;
-                    case VIDEO:
-                        videoPickerFragment.finishChooseVideo();
-                        break;
-                    case ALL:
-                        if(currentIndex == 0){
-                            photoPickerFragment.finishChooseImg();
-                        }else{
-                            videoPickerFragment.finishChooseVideo();
-                        }
-                        break;
-                }
-            }
-        });
+//        finishTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                switch (modeType) {
+//                    case PHOTO:
+//                        photoPickerFragment.finishChooseImg();
+//                        break;
+//                    case VIDEO:
+//                        videoPickerFragment.finishChooseVideo();
+//                        break;
+//                    case ALL:
+//                        if(currentIndex == 0){
+//                            photoPickerFragment.finishChooseImg();
+//                        }else{
+//                            videoPickerFragment.finishChooseVideo();
+//                        }
+//                        break;
+//                }
+//            }
+//        });
 
     }
 
     public void initRightText(int selectCount, int maxCount) {
-        finishTv.setText((getString(getTextString(), selectCount, maxCount)));
+//        finishTv.setText((getString(getTextString(), selectCount, maxCount)));
+        showRightText(selectCount,maxCount);
     }
 
-    public TextView getRightText() {
-        return finishTv;
+    private void showRightText(int selectCount, int maxCount){
+        String selectStr = selectCount + "";
+        String maxStr = "/" + maxCount;
+        SpannableStringBuilder style = new SpannableStringBuilder(selectStr + maxStr);
+        style.setSpan(new AbsoluteSizeSpan(17,true), 0, selectStr.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        style.setSpan(new AbsoluteSizeSpan(14,true), selectStr.length(), (selectStr + maxStr).length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        finishTv.setText(style);
     }
+
+//    public TextView getRightText() {
+//        return finishTv;
+//    }
 
     private void setTabLayout() {
         adapter = new PhotoPickerPagerAdapter(getSupportFragmentManager(), viewPager) {

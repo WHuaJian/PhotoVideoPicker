@@ -10,9 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.whj.photovideopicker.R;
 import com.whj.photovideopicker.model.VideoDirectory;
+import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class PopupVideoDirectoryListAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mLayoutInflater.inflate(R.layout.item_photo_album, parent, false);
-            holder.ivAlbum = (SimpleDraweeView) convertView.findViewById(R.id.iv_album);
+            holder.ivAlbum = (ImageView) convertView.findViewById(R.id.iv_album);
             holder.ivIndex = (ImageView) convertView.findViewById(R.id.iv_index);
             holder.tvName = (TextView) convertView.findViewById(R.id.tv_name_la);
             holder.tvCount = (TextView) convertView.findViewById(R.id.tv_count_la);
@@ -80,7 +80,7 @@ public class PopupVideoDirectoryListAdapter extends BaseAdapter {
 
 
     private class ViewHolder {
-        SimpleDraweeView ivAlbum;
+        ImageView ivAlbum;
         ImageView ivIndex;
         TextView tvName;
         TextView tvCount;
@@ -90,8 +90,9 @@ public class PopupVideoDirectoryListAdapter extends BaseAdapter {
                 return;
             }
 
-            Uri uri = Uri.parse("file://" + directory.getCoverPath());
-            ivAlbum.setImageURI(uri);
+
+            PickerUtils.loadImage(context,ivAlbum, "file://" + directory.getCoverPath());
+
             tvName.setText(directory.getName());
             tvCount.setText(context.getString(R.string.image_count, directory.getVideos().size()));
             if (mCheckPosition == position) {

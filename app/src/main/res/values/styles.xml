@@ -3,9 +3,9 @@
     <style name="AppTheme" parent="AppTheme.Base"></style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/_ffffff</item>
-        <item name="colorPrimaryDark">@color/_ffffff</item>
-        <item name="colorAccent">@color/_ffffff</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
 
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowIsTranslucent">false</item>

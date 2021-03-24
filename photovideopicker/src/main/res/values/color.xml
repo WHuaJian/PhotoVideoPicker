@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="_ff3b30">#ff3b30</color>
-    <color name="_5AC8FA">#5AC8FA</color>
+    <color name="_5AC8FA">#2D8EFF</color>
     <color name="_ffffff">#ffffff</color>
     <color name="_f1f1f1">#f1f1f1</color>
+    <color name="_EDEDEB">#EDEDEB</color>
+    <color name="_202833">#202833</color>
     <color name="_e2e2e2">#e2e2e2</color>
     <color name="_f9f9f9">#f9f9f9</color>
     <color name="_000000">#000000</color>
+    <color name="_9CA1A8">#9CA1A8</color>
 </resources>

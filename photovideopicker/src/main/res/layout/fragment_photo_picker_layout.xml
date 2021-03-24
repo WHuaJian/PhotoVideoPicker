@@ -15,16 +15,12 @@
         android:background="@color/_ffffff"
         android:gravity="center" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/_e2e2e2"/>
 
     <RelativeLayout
         android:id="@+id/layout_bottombar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/topbar_height"
-        android:background="@color/_ffffff"
+        android:layout_height="60dp"
+        android:background="#EDEDEB"
         android:gravity="center_vertical">
 
         <TextView
@@ -38,35 +34,62 @@
             android:minWidth="50dp"
             android:text="@string/recent_photos"
             android:textColor="@color/_5AC8FA"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tv_share"
-            android:layout_width="wrap_content"
+            android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/picker_selecter"
-            android:gravity="left|center_vertical"
-            android:minWidth="50dp"
-            android:padding="10dp"
-            android:text="@string/share_to_class"
-            android:textColor="@color/_5AC8FA"
-            android:textSize="14sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_finish"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_buttonl_selector"
+                android:clickable="true"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="完成"
+                android:textColor="@color/_5AC8FA"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_gradual_selector"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:visibility="visible"
+                android:padding="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/share_to_class"
+                android:textColor="@color/_ffffff"
+                android:textSize="16sp" />
+
+
+
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_preview"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
             android:background="@drawable/picker_selecter"
             android:clickable="true"
             android:padding="10dp"
             android:text="@string/preview"
             android:textColor="@color/_5AC8FA"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
+
     </RelativeLayout>
 
 

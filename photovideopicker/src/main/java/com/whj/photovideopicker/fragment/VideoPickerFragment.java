@@ -49,6 +49,7 @@ import java.util.Random;
 import static android.app.Activity.RESULT_OK;
 import static android.os.Build.VERSION_CODES.M;
 import static android.os.Build.VERSION_CODES.N;
+import static com.whj.photovideopicker.PhotoPicker.IS_TOUPING;
 import static com.whj.photovideopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
 import static com.whj.photovideopicker.PhotoPicker.RESULT_TYPE;
 import static com.whj.photovideopicker.PhotoPicker.SUPPORT_SHARE;
@@ -73,7 +74,7 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
     public static final int REQUEST_TAKE_LENOVO = 124;
 
     public int maxCount = 1;
-    private boolean isSupportShare;
+    private boolean isSupportShare,isTouping;
 
     private VideoGirdAdapter mVideoAdapter;
 
@@ -86,7 +87,7 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     RecyclerView recyclerView;
 
-    TextView mAlbum, tv_share;
+    TextView mAlbum, tv_share,tv_finish;
 
     TextView mPreview;
 
@@ -105,10 +106,12 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
         mAlbum = $(rootView, R.id.tv_album_ar);
         mPreview = $(rootView, R.id.tv_preview);
         tv_share = $(rootView, R.id.tv_share);
+        tv_finish = $(rootView, R.id.tv_finish);
 
         mAlbum.setOnClickListener(this);
         mPreview.setOnClickListener(this);
         tv_share.setOnClickListener(this);
+        tv_finish.setOnClickListener(this);
     }
 
     @Override
@@ -139,12 +142,13 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     private List<String> mTempVideos = new ArrayList<>();
 
-    public static VideoPickerFragment newInstance(int max_count, String dir, boolean isSupportShare) {
+    public static VideoPickerFragment newInstance(int max_count, String dir, boolean isSupportShare,boolean isTouping) {
         VideoPickerFragment videoPickerFragment = new VideoPickerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(VIDEO_EXTRA_MAX_COUNT, max_count);
         bundle.putString(VIDEO_SAVE_DIRECTORY, dir);
         bundle.putBoolean(SUPPORT_SHARE, isSupportShare);
+        bundle.putBoolean(IS_TOUPING, isTouping);
         videoPickerFragment.setArguments(bundle);
         return videoPickerFragment;
     }
@@ -163,6 +167,7 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
         maxCount = getArguments().getInt(VIDEO_EXTRA_MAX_COUNT);
         saveDirectory = getArguments().getString(VIDEO_SAVE_DIRECTORY);
         isSupportShare = getArguments().getBoolean(SUPPORT_SHARE, false);
+        isTouping = getArguments().getBoolean(IS_TOUPING, false);
         setRetainInstance(true);
         directories = new ArrayList<>();
         mVideoAdapter = new VideoGirdAdapter(getActivity(), directories);
@@ -180,8 +185,17 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     }
 
+
+    private int getTextString() {
+        if (isTouping) {
+            return R.string.done_with_count;
+        }
+
+        return R.string.done_with_count_finish;
+    }
+
     private void initShareText(int number) {
-        tv_share.setText(getString(R.string.share_to_class, number, maxCount));
+//        tv_share.setText(getString(R.string.share_to_class, number, maxCount));
     }
 
     private void initConfig() {
@@ -220,12 +234,14 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
         } else {
             tv_share.setVisibility(View.GONE);
         }
+        tv_finish.setText(getTextString());
+
         mPreview.setVisibility(View.VISIBLE);
         mAlbum.setText(getResources().getText(R.string.recent_video));
 
         initShareText(0);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), PickerUtils.getSpanNumber(getActivity()));
-        recyclerView.addItemDecoration(new PhotoGridAutofitDecoration(6, 5));
+        recyclerView.addItemDecoration(new PhotoGridAutofitDecoration(PickerUtils.getSpanNumber(getActivity()), 1));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mVideoAdapter);
 
@@ -277,7 +293,7 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
 
                 int total = selectedItemCount + (isCheck ? -1 : 1);
 
-                ((PickerMainActivity) getActivity()).getRightText().setEnabled(total > 0);
+                tv_finish.setEnabled(total > 0);
 
                 if (total > maxCount) {
                     toast(getString(R.string.over_max_count_video_tips, maxCount));
@@ -510,6 +526,8 @@ public class VideoPickerFragment extends PickerBaseFragment implements View.OnCl
                 getActivity().finish();
             }
 
+        } else if(viewId == R.id.tv_finish){
+            finishChooseVideo();
         }
     }
 

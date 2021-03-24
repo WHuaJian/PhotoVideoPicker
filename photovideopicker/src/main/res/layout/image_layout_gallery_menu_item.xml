@@ -6,16 +6,17 @@
     android:layout_height="wrap_content"
     android:layout_margin="1px"
     android:background="#FFF"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/sdv_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="3dp"
-        android:background="#E3E3E3"
-        app:actualImageScaleType="focusCrop" />
+        android:background="#E3E3E3" />
 
     <TextView
         android:id="@+id/tv_name"

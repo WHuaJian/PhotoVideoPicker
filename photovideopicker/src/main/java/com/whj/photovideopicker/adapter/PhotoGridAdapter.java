@@ -9,12 +9,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.whj.photovideopicker.R;
 import com.whj.photovideopicker.listener.OnItemCheckListener;
 import com.whj.photovideopicker.listener.OnPhotoClickListener;
 import com.whj.photovideopicker.model.Photo;
 import com.whj.photovideopicker.model.PhotoDirectory;
+import com.whj.photovideopicker.utils.GlideApp;
 import com.whj.photovideopicker.utils.MediaStoreHelper;
 import com.whj.photovideopicker.utils.PickerUtils;
 
@@ -88,8 +89,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                 photo = photos.get(position);
             }
 
-            PickerUtils.showThumb(holder.ivPhoto, "file://" + photo.getPath());
-
+            PickerUtils.loadImage(mContext,holder.ivPhoto, "file://" + photo.getPath());
 
             final boolean isChecked = isSelected(photo);
 
@@ -140,13 +140,13 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
-        private SimpleDraweeView ivPhoto;
+        private ImageView ivPhoto;
         private ImageView vSelected;
         private RelativeLayout vRoot;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
-            ivPhoto = (SimpleDraweeView) itemView.findViewById(R.id.iv_photo);
+            ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
             vSelected = (ImageView) itemView.findViewById(R.id.cb_photo);
             vRoot = (RelativeLayout) itemView.findViewById(R.id.iv_root);
         }

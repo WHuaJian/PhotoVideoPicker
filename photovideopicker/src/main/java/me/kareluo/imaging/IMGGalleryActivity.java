@@ -11,16 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.AbstractDraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.common.RotationOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.whj.photovideopicker.R;
+import com.whj.photovideopicker.utils.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -248,7 +243,7 @@ public class IMGGalleryActivity extends AppCompatActivity implements View.OnClic
 
         private CheckBox mCheckBox;
 
-        private SimpleDraweeView mImageView;
+        private ImageView mImageView;
 
         private IMGGalleryHolderCallback mCallback;
 
@@ -269,18 +264,23 @@ public class IMGGalleryActivity extends AppCompatActivity implements View.OnClic
             mCheckBox.setChecked(model.isSelected());
             mCheckBox.setVisibility(mode.isSingleChoose() ? View.GONE : View.VISIBLE);
 
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(model.getUri())
-                    .setLocalThumbnailPreviewsEnabled(true)
-                    .setResizeOptions(new ResizeOptions(300, 300))
-                    .setRotationOptions(RotationOptions.autoRotate())
-                    .build();
+//            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(model.getUri())
+//                    .setLocalThumbnailPreviewsEnabled(true)
+//                    .setResizeOptions(new ResizeOptions(300, 300))
+//                    .setRotationOptions(RotationOptions.autoRotate())
+//                    .build();
+//
+//            AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
+//                    .setOldController(mImageView.getController())
+//                    .setImageRequest(request)
+//                    .build();
+//
+//            mImageView.setController(controller);
 
-            AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setOldController(mImageView.getController())
-                    .setImageRequest(request)
-                    .build();
-
-            mImageView.setController(controller);
+            GlideApp.with(mImageView.getContext())
+                    .load(model.getUri())
+//                    .placeholder(R.mipmap.photo_default_bg)
+                    .into(mImageView);
         }
 
         @Override

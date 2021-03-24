@@ -3,6 +3,8 @@
                 xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/albumitem_height"
+    android:paddingRight="15dp"
+    android:paddingLeft="15dp"
                 android:gravity="center_vertical">
 
     <RelativeLayout
@@ -17,14 +19,13 @@
             android:background="@mipmap/bg_album_border"
             android:scaleType="fitCenter"/>
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <ImageView
             android:id="@+id/iv_album"
             android:layout_width="@dimen/albumitem_content_height"
             android:layout_height="@dimen/albumitem_content_height"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
-            android:scaleType="centerCrop"
-            fresco:placeholderImage="@mipmap/photo_default_bg"/>
+            android:scaleType="centerCrop"/>
     </RelativeLayout>
 
     <RelativeLayout

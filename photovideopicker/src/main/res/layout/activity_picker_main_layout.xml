@@ -28,14 +28,16 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabContentStart="15dp"
-            app:tabIndicatorColor="@null"
+            app:tabIndicator="@drawable/photo_tab_indicator"
+            app:tabIndicatorFullWidth="false"
             app:tabPadding="12dp"
             app:tabMaxWidth="200dp"
             app:tabMinWidth="40dp"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/_5AC8FA"
-            app:tabTextColor="@color/_000000" />
+            app:tabSelectedTextColor="@color/_202833"
+            app:tabTextColor="@color/_9CA1A8" />
 
         <TextView
             android:id="@+id/topbar_right_icon"
@@ -43,11 +45,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/picker_selecter"
             android:padding="5dp"
-            android:text="@string/done_with_count"
-            android:textColor="@color/_5AC8FA"
-            android:textSize="14sp" />
+            android:layout_marginRight="10dp"
+            android:textColor="@color/_202833"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

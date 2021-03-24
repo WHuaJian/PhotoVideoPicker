@@ -1,0 +1,1 @@
+package com.whj.photovideopicker.utils;import com.bumptech.glide.annotation.GlideModule;import com.bumptech.glide.module.AppGlideModule;/** * author : William * github : WHuaJian * date   : 2021/3/1215:31 * desc   : */@GlideModulepublic class MyGlideApp extends AppGlideModule {}

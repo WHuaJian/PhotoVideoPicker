@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.whj.photovideopicker.R;
 
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class IMGGalleryMenuWindow extends PopupWindow {
     private static class MenuItemViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private SimpleDraweeView imageView;
+        private ImageView imageView;
 
         private TextView textView;
 

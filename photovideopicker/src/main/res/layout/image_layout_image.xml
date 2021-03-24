@@ -5,12 +5,10 @@
     android:layout_height="wrap_content"
     android:padding="1dp">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/sdv_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:actualImageScaleType="focusCrop"
-        app:viewAspectRatio="1" />
+        android:layout_height="wrap_content" />
 
     <CheckBox
         android:id="@+id/cb_box"

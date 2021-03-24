@@ -8,14 +8,17 @@
 
         <activity
             android:name=".PickerMainActivity"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
 
         <activity
             android:name=".PhotoPreviewActivity"
             android:theme="@style/photopager_translucent"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
         <activity
             android:name=".VideoRecorderActivity"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
         <provider
             android:name="com.whj.photovideopicker.utils.PhotoFileProvider"
@@ -31,15 +34,18 @@
 
         <activity
             android:name="me.kareluo.imaging.IMGGalleryActivity"
+            android:screenOrientation="sensorLandscape"
             android:theme="@style/ImageGalleryTheme" />
 
         <activity
             android:name="me.kareluo.imaging.IMGEditActivity"
             android:theme="@style/ImageEditTheme"
+            android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name="com.otaliastudios.cameraview.CameraActivity"
             android:hardwareAccelerated="true"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenLayout|keyboardHidden"/>
 
     </application>

@@ -10,7 +10,6 @@ import android.view.View;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.whj.photovideopicker.PhotoPicker;
 import com.whj.photovideopicker.listener.OnResultListener;
-import com.whj.photovideopicker.utils.ImagePipelineConfigFactory;
 
 import java.util.ArrayList;
 
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 .choiceVideoNumber(1) //视频选择最大数量，默认9
                 .choicePhotoNumber(9) //图片选择最大数量，默认9
                 .setSupportShare(true) //是否支持分享，默认不支持
-                .setIsTouPing(false) //是否是投屏，默认是完成
+                .setIsTouPing(true) //是否是投屏，默认是完成
                 .setIsNeedPicEdit(true) //是否支持裁剪
                 .setPhotoCompress(false) //是否压缩图片
                 .videoSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath()) //指定视频存储文件夹
@@ -70,22 +69,23 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onPhotoResult(ArrayList<String> photos) {
-                        Log.i("photos_size= ", photos.size()+"");
+                        Log.i("size_photos= ", photos.size()+"");
                     }
 
                     @Override
                     public void onVideoResult(ArrayList<String> videos) {
-                        Log.i("photos_size= ", videos.size()+"");
+                        Log.i("size_videos= ", videos.size()+"");
 
                     }
 
                     @Override
                     public void onPhotoShareResult(ArrayList<String> files) {
+                        Log.i("size_photos_share= ", files.size()+"");
                     }
 
                     @Override
                     public void onVideoShareResult(ArrayList<String> files) {
-
+                        Log.i("size_videos_share= ", files.size()+"");
                     }
 
                 });

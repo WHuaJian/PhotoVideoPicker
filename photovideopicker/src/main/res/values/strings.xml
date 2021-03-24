@@ -4,9 +4,9 @@
     <string name="recent_photos">最近照片</string>
     <string name="preview">预览</string>
     <string name="image_count">%1$d张</string>
-    <string name="done_with_count">投屏(%1$d/%2$d)</string>
-    <string name="done_with_count_finish">完成(%1$d/%2$d)</string>
-    <string name="share_to_class">分享到班级(%1$d/%2$d)</string>
+    <string name="done_with_count">投屏</string>
+    <string name="done_with_count_finish">完成</string>
+    <string name="share_to_class">分享到班级</string>
     <string name="pic_count">%1$s/%2$s</string>
     <string name="capture">裁剪</string>
 

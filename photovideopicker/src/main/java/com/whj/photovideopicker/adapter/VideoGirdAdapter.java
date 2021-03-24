@@ -38,11 +38,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.whj.photovideopicker.R;
 import com.whj.photovideopicker.listener.OnItemCheckListener;
 import com.whj.photovideopicker.model.Video;
 import com.whj.photovideopicker.model.VideoDirectory;
+import com.whj.photovideopicker.utils.GlideApp;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.util.ArrayList;
@@ -108,7 +109,11 @@ public class VideoGirdAdapter extends RecyclerView.Adapter<VideoGirdAdapter.Vide
             final Video video = videos.get(position - 1);
 
 
-            PickerUtils.showThumb(holder.ivPhoto, "file://" + video.getPath());
+//            PickerUtils.showThumb(holder.ivPhoto, "file://" + video.getPath());
+            GlideApp.with(mContext).load("file://" + video.getPath())
+//                    .placeholder(R.mipmap.photo_default_bg)
+                    .centerCrop()
+                    .into(holder.ivPhoto);
 
             if (video.getDuration() <= 0) {
                 holder.tvVideoTime.setVisibility(View.GONE);
@@ -172,14 +177,14 @@ public class VideoGirdAdapter extends RecyclerView.Adapter<VideoGirdAdapter.Vide
     }
 
     public static class VideoHolder extends RecyclerView.ViewHolder {
-        private SimpleDraweeView ivPhoto;
+        private ImageView ivPhoto;
         private ImageView vSelected;
         private RelativeLayout vRoot;
         private TextView tvVideoTime;
 
         public VideoHolder(View itemView) {
             super(itemView);
-            ivPhoto = (SimpleDraweeView) itemView.findViewById(R.id.iv_photo);
+            ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
             vSelected = (ImageView) itemView.findViewById(R.id.cb_photo);
             vRoot = (RelativeLayout) itemView.findViewById(R.id.iv_root);
             tvVideoTime = itemView.findViewById(R.id.tvVideoTime);

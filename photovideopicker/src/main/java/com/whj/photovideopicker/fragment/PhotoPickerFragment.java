@@ -58,6 +58,7 @@ import me.kareluo.imaging.IMGEditActivity;
 import static android.app.Activity.RESULT_OK;
 import static com.whj.photovideopicker.PhotoPicker.IS_COMPRESS;
 import static com.whj.photovideopicker.PhotoPicker.IS_NEED_PIC_EDIT;
+import static com.whj.photovideopicker.PhotoPicker.IS_TOUPING;
 import static com.whj.photovideopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
 import static com.whj.photovideopicker.PhotoPicker.PHOTO;
 import static com.whj.photovideopicker.PhotoPicker.PHOTO_EXTRA_MAX_COUNT;
@@ -92,22 +93,23 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
 
     RecyclerView recyclerView;
-    TextView mAlbum, tv_share;
+    TextView mAlbum, tv_share,tv_finish;
     TextView mPreview;
 
-    private boolean isNeedPicEdit;
+    private boolean isNeedPicEdit,isTouping;
     private boolean isCompress;
     private List<String> mTempImages = new ArrayList<>();
     private Handler handler = new Handler();
 
 
-    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit, boolean isCompress, boolean isSupportShare) {
+    public static PhotoPickerFragment newInstance(int max_count, boolean isNeedPicEdit, boolean isCompress, boolean isSupportShare,boolean isTouping) {
         PhotoPickerFragment pickerFragment = new PhotoPickerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(PHOTO_EXTRA_MAX_COUNT, max_count);
         bundle.putBoolean(SUPPORT_SHARE, isSupportShare);
         bundle.putBoolean(IS_NEED_PIC_EDIT, isNeedPicEdit);
         bundle.putBoolean(IS_COMPRESS, isCompress);
+        bundle.putBoolean(IS_TOUPING, isTouping);
         pickerFragment.setArguments(bundle);
         return pickerFragment;
     }
@@ -124,10 +126,12 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         mAlbum = $(rootView, R.id.tv_album_ar);
         mPreview = $(rootView, R.id.tv_preview);
         tv_share = $(rootView, R.id.tv_share);
+        tv_finish = $(rootView, R.id.tv_finish);
 
         mAlbum.setOnClickListener(this);
         mPreview.setOnClickListener(this);
         tv_share.setOnClickListener(this);
+        tv_finish.setOnClickListener(this);
     }
 
     private LocalBroadcastManager broadcastManager;
@@ -142,6 +146,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         isSupportShare = getArguments().getBoolean(SUPPORT_SHARE, false);
         isNeedPicEdit = getArguments().getBoolean(IS_NEED_PIC_EDIT, false);
         isCompress = getArguments().getBoolean(IS_COMPRESS, false);
+        isTouping = getArguments().getBoolean(IS_TOUPING, false);
         directories = new ArrayList<>();
         photoGridAdapter = new PhotoGridAdapter(getActivity(), directories);
         listAdapter = new PopupDirectoryListAdapter(getActivity(), directories);
@@ -161,6 +166,15 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         receiver = new PhotoEditReceiver();
         broadcastManager = LocalBroadcastManager.getInstance(getActivity());
         broadcastManager.registerReceiver(receiver, new IntentFilter("photo_edit"));
+
+    }
+
+    private int getTextString() {
+        if (isTouping) {
+            return R.string.done_with_count;
+        }
+
+        return R.string.done_with_count_finish;
     }
 
     private class PhotoEditReceiver extends BroadcastReceiver {
@@ -295,12 +309,14 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         } else {
             tv_share.setVisibility(View.GONE);
         }
+        tv_finish.setText(getTextString());
+
         mPreview.setVisibility(View.VISIBLE);
         mPreview.setText("预览");
         initShareText(0);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), PickerUtils.getSpanNumber(getActivity()));
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new PhotoGridAutofitDecoration(6, 5));
+        recyclerView.addItemDecoration(new PhotoGridAutofitDecoration(PickerUtils.getSpanNumber(getActivity()), 1));
         recyclerView.setAdapter(photoGridAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -329,7 +345,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
                 int total = selectedItemCount + (isCheck ? -1 : 1);
 
-                ((PickerMainActivity) getActivity()).getRightText().setEnabled(total > 0);
+                tv_finish.setEnabled(total > 0);
                 if (total > maxCount) {
                     toast(getString(R.string.over_max_count_tips, maxCount));
                     return false;
@@ -359,7 +375,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     }
 
     private void initShareText(int number) {
-        tv_share.setText(getString(R.string.share_to_class, number, maxCount));
+//        tv_share.setText(getString(R.string.share_to_class, number, maxCount));
     }
 
     private void initListPopupWindow() {
@@ -640,6 +656,8 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             intent.putExtra(RESULT_TYPE, PHOTO_SHARE);
             getActivity().setResult(RESULT_OK, intent);
             getActivity().finish();
+        } else if (viewId == R.id.tv_finish){
+            finishChooseImg();
         }
     }
 }
