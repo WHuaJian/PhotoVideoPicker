@@ -219,7 +219,16 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 
     @Override
     protected void onUserVisible() {
+    }
 
+    public void clearTempList(){
+        tempLists.clear();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        tempLists.clear();
     }
 
     public int getPhotoSelectNumer() {
@@ -339,7 +348,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
 //                        Intent intent = new Intent(getActivity(), CameraActivity.class);
 //                        startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
 //                    }
-
+                    tempLists.clear();
                     Intent intent = new Intent(getActivity(), CameraActivity.class);
                     startActivityForResult(intent, CameraActivity.TAKE_PHOTO_CODE);
                 } catch (Exception e) {
@@ -639,6 +648,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             }
 
         } else if (viewId == R.id.tv_preview) {
+            tempLists.clear();
             ArrayList<String> arrayList = getSelectedPhotoPaths();
             if (arrayList == null || arrayList.isEmpty()) {
                 toast("请选择图片");

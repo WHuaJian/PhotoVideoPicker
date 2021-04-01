@@ -161,9 +161,9 @@ public class IMGEditActivity extends IMGEditBaseActivity {
                             e.printStackTrace();
                         }
                     }
-                    if(!TextUtils.isEmpty(path)){
-                        updatePicture(path);
-                    }
+//                    if(!TextUtils.isEmpty(path)){
+//                        updatePicture(path);
+//                    }
                 }
                 Intent intent = new Intent();
                 intent.putExtra("edit_pic_path", path);

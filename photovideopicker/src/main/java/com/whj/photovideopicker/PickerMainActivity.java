@@ -146,6 +146,9 @@ public class PickerMainActivity extends PickerBaseActivity {
                 } else {
                     initRightText(videoPickerFragment.getVideoSelectNumber(), maxVideoCount);
                 }
+                if(modeType == ALL && currentIndex != 0){
+                    photoPickerFragment.clearTempList();
+                }
             }
 
             @Override
