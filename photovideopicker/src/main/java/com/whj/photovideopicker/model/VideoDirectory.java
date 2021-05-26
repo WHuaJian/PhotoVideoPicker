@@ -1,5 +1,7 @@
 package com.whj.photovideopicker.model;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,11 @@ public class VideoDirectory{
         VideoDirectory directory = (VideoDirectory) o;
 
         if (!id.equals(directory.id)) return false;
+
+        if(TextUtils.isEmpty(name)){
+            return false;
+        }
+
         return name.equals(directory.name);
     }
 
