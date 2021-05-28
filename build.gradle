@@ -27,7 +27,7 @@ allprojects {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url 'https://dl.bintray.com/jetbrains/anko' }
         maven {
-            url "https://jitpack.io"
+            url "https://www.jitpack.io"
             credentials { username authToken }
         }
         mavenCentral()

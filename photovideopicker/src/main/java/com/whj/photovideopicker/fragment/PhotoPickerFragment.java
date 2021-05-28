@@ -8,10 +8,12 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -50,12 +52,21 @@ import com.whj.photovideopicker.utils.PhotoGridAutofitDecoration;
 import com.whj.photovideopicker.utils.PickerUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import io.reactivex.Flowable;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import me.kareluo.imaging.IMGEditActivity;
+import top.zibin.luban.Luban;
 
 import static android.app.Activity.RESULT_OK;
 import static com.whj.photovideopicker.PhotoPicker.IS_COMPRESS;
@@ -221,7 +232,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
     protected void onUserVisible() {
     }
 
-    public void clearTempList(){
+    public void clearTempList() {
         tempLists.clear();
     }
 
@@ -253,7 +264,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
             for (Map.Entry<String, String> path : tempLists.entrySet()) {
                 Photo photo = getAllPhoto(path.getValue());
                 if (photo != null) {
-                    if(!photoGridAdapter.getSelectedPhotos().contains(photo)){
+                    if (!photoGridAdapter.getSelectedPhotos().contains(photo)) {
                         photoGridAdapter.getSelectedPhotos().add(photo);
                     }
                 }
@@ -551,6 +562,7 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         return photoGridAdapter.getSelectedPhotoPaths();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void finishChooseImg() {
         if (null == getSelectedPhotoPaths() || getSelectedPhotoPaths().size() == 0) {
             toast("请选择图片");
@@ -587,23 +599,49 @@ public class PhotoPickerFragment extends PickerBaseFragment implements View.OnCl
         }
     }
 
-    private void compressImages(ArrayList<String> selectedPhotoPaths) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void compressImages(final ArrayList<String> selectedPhotoPaths) {
         showProgress();
-        LubanUtil.compress(getActivity(), selectedPhotoPaths, new LubanUtil.ICompressCallBack() {
-            @Override
-            public void onComplete(ArrayList<String> files) {
-                dismissProgress();
-                Intent intent = new Intent();
-                intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, files);
-                intent.putExtra(RESULT_TYPE, PHOTO);
-                getActivity().setResult(RESULT_OK, intent);
-                getActivity().finish();
-            }
-        });
+
+        LubanUtil.compress(getActivity(), selectedPhotoPaths)
+                .subscribe(new SingleObserver<List<String>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<String> files) {
+                        dismissProgress();
+                        ArrayList<String> path = new ArrayList<>();
+                        if (files == null || files.size() == 0) {
+                            path.addAll(selectedPhotoPaths);
+                        } else {
+                            path.addAll(files);
+                        }
+
+                        Intent intent = new Intent();
+                        intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, path);
+                        intent.putExtra(RESULT_TYPE, PHOTO);
+                        getActivity().setResult(RESULT_OK, intent);
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        /*如果发生错误，继续返回原图*/
+                        Intent intent = new Intent();
+                        intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotoPaths);
+                        intent.putExtra(RESULT_TYPE, PHOTO);
+                        getActivity().setResult(RESULT_OK, intent);
+                        getActivity().finish();
+                    }
+                });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
 
         if (requestCode == MY_PERMISSIONS_REQUEST_READ_STORE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

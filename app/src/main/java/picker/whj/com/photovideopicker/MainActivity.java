@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 .choiceVideoNumber(1) //视频选择最大数量，默认9
                 .choicePhotoNumber(9) //图片选择最大数量，默认9
                 .setSupportShare(true) //是否支持分享，默认不支持
-                .setIsTouPing(true) //是否是投屏，默认是完成
+                .setIsTouPing(false) //是否是投屏，默认是完成
                 .setIsNeedPicEdit(true) //是否支持裁剪
-                .setPhotoCompress(false) //是否压缩图片
+                .setPhotoCompress(true) //是否压缩图片
                 .videoSaveDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath()) //指定视频存储文件夹
                 .build(new OnResultListener() {
 
